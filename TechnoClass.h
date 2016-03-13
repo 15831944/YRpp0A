@@ -186,7 +186,7 @@ public:
 	virtual bool vt_entry_29C() R0;
 	virtual bool ShouldBeCloaked() const R0;
 	virtual bool ShouldNotBeCloaked() const R0;
-	virtual DirStruct* GetFacing(DirStruct* pBuffer) const R0;
+	virtual DirStruct* GetTurretFacing(DirStruct* pBuffer) const R0;
 	virtual bool IsArmed() const R0; // GetWeapon(primary) && GetWeapon(primary)->WeaponType
 	virtual void vt_entry_2B0() const RX;
 	virtual double GetStoragePercentage() const R0;
@@ -437,6 +437,9 @@ public:
 	bool HasAbility(Ability ability) const
 		{ JMP_THIS(0x70D0D0); }
 
+	int DistToTarget(TechnoClass* Target) const
+		{ JMP_THIS(0x5F6360); }
+
 	int GetIonCannonValue(AIDifficulty difficulty) const;
 
 	int GetIonCannonValue(AIDifficulty difficulty, int maxHealth) const {
@@ -448,9 +451,9 @@ public:
 		return this->GetIonCannonValue(difficulty);
 	}
 
-	DirStruct GetFacing() const {
+	DirStruct GetTurretFacing() const {
 		DirStruct ret;
-		this->GetFacing(&ret);
+		this->GetTurretFacing(&ret);
 		return ret;
 	}
 
