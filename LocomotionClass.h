@@ -292,7 +292,7 @@ protected:
 
 public:
 
-	DWORD unknown_08;
+	UnitClass *Owner;
 	FootClass* LinkedTo;	//This Locomotor is linked to this object.
 	bool Powered;	//Does this Locomotor currently have power?
 	bool Dirty;		//bIsDirty - Has something changed?

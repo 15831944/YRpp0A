@@ -198,6 +198,11 @@ public:
 	CellClass* CellIteratorNext()
 		{ JMP_THIS(0x578290); }
 
+
+	void UpdataUnitLayer(ObjectClass *obj)
+	{
+		JMP_THIS(0x4A9720);
+	}
 // the key damage delivery
 /*! The key damage delivery function.
 	\param Coords Location of the impact/center of damage.
