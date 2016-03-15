@@ -74,10 +74,10 @@ public:
 		{ return true; }
 
 	//virtual TransformMatrix* __stdcall Draw_Matrix(TransformMatrix* pMatrix, int* key)
-	virtual  Matrix3DStruct::TransformMatrix* __stdcall Draw_Matrix(Matrix3DStruct::TransformMatrix* pMatrix, int* key)
+	virtual  TransformMatrix* __stdcall Draw_Matrix(TransformMatrix* pMatrix, int* key)
 		{ JMP_STD(0x55A730); }
 
-	virtual  Matrix3DStruct::TransformMatrix* __stdcall Shadow_Matrix(Matrix3DStruct::TransformMatrix* pMatrix, int* key)
+	virtual  TransformMatrix* __stdcall Shadow_Matrix(TransformMatrix* pMatrix, int* key)
 		{ JMP_STD(0x55A7D0); }
 
 	virtual Point2D* __stdcall Draw_Point(Point2D* pPoint)

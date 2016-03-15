@@ -89,7 +89,7 @@ public:
 	int span_end_off;
 	int span_data_off;
 	float DetFloat;
-	Matrix3DStruct::TransformMatrix TransformationMatrix;
+	TransformMatrix TransformationMatrix;
 	Vector3D<float> MinBounds;
 	Vector3D<float> MaxBounds;
 	char size_X;
@@ -104,7 +104,7 @@ struct VoxelSectionTailer {
 	int span_end_off;
 	int span_data_off;
 	float HVAMultiplier;
-	Matrix3DStruct::TransformMatrix TransformationMatrix;
+	TransformMatrix TransformationMatrix;
 	Vector3D<float> MinBounds;
 	int MaxBounds;
 	int field_50;

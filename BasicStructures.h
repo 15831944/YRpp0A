@@ -85,22 +85,34 @@ struct RandomStruct
 struct Matrix3DStruct
 {
 	float Data[12];
-	struct TransformMatrix{
-	public:
-		using TransformVector = Vector3D<float>;
-		float Matrix[12];
-
-		TransformMatrix* __fastcall Transpose(TransformMatrix *data)
-		{
-			JMP_THIS(0x5AFC20);
-		}
-
-		TransformVector *Scale(TransformVector *out, TransformVector *in)
-		{
-			JMP_THIS(0x5AF4D0);
-		}
-	};
 };
+
+struct TransformMatrix{
+public:
+	using TransformVector = Vector3D<float>;
+	float Matrix[12];
+	TransformMatrix* __fastcall Transpose(TransformMatrix *data)
+	{
+		JMP_THIS(0x5AFC20);
+	}
+	TransformVector *Scale(TransformVector *out, TransformVector *in)
+	{
+		JMP_THIS(0x5AF4D0);
+	}
+	void Mul(TransformVector factor)
+	{
+		JMP_THIS(0x5AE890);
+	}
+	void Rotate(float angle)
+	{
+		JMP_THIS(0x5AF1A0);
+	}
+	void Identity()
+	{
+		JMP_THIS(0x5AE860);
+	}
+};
+
 
 //Ares WC added
 /**
