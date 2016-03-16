@@ -87,50 +87,25 @@ struct Matrix3DStruct
 	float Data[12];
 };
 
+//Ares WC added
+/**
+3x4的矩阵，左3x3为转换矩阵，由3*1是转换后的平移向量
+*/
 struct TransformMatrix{
 public:
 	using TransformVector = Vector3D<float>;
 	float Matrix[12];
 	TransformMatrix* __fastcall Transpose(TransformMatrix *data)
-	{
-		JMP_THIS(0x5AFC20);
-	}
+		{ JMP_THIS(0x5AFC20); }
 	TransformVector *Scale(TransformVector *out, TransformVector *in)
-	{
-		JMP_THIS(0x5AF4D0);
-	}
+		{ JMP_THIS(0x5AF4D0); }
 	void Mul(TransformVector factor)
-	{
-		JMP_THIS(0x5AE890);
-	}
+		{ JMP_THIS(0x5AE890); }
 	void Rotate(float angle)
-	{
-		JMP_THIS(0x5AF1A0);
-	}
+		{ JMP_THIS(0x5AF1A0); }
 	void Identity()
-	{
-		JMP_THIS(0x5AE860);
-	}
+		{ JMP_THIS(0x5AE860); }
 };
-
-
-//Ares WC added
-/**
-3x4的矩阵，左3x3为转换矩阵，由3*1是转换后的平移向量
-*/
-/*
-struct TransformMatrix : Matrix3DStruct {
-public:
-	using TransformVector = Vector3D<float>;
-	float Matrix[12];
-
-	TransformMatrix* __fastcall Transpose(TransformMatrix *data)
-	{ JMP_THIS(0x5AFC20); }
-
-	TransformVector *Scale(TransformVector *out, TransformVector *in)
-	{ JMP_THIS(0x5AF4D0); }
-};
-*/
 
 //obvious
 struct RectangleStruct

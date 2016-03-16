@@ -69,7 +69,7 @@ public:
 	DWORD unknown_1490;
 	DWORD unknown_1494;
 	DWORD unknown_1498;
-	RectangleStruct RaderRect;
+	RectangleStruct RadarRect;
 	DWORD unknown_14AC;
 	DWORD unknown_14B0;
 	DWORD unknown_14B4;
