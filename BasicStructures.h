@@ -99,8 +99,10 @@ public:
 		{ JMP_THIS(0x5AFC20); }
 	TransformVector *Scale(TransformVector *out, TransformVector *in)
 		{ JMP_THIS(0x5AF4D0); }
+	//make the matrix coords multiple with the matrix
 	void Mul(TransformVector factor)
 		{ JMP_THIS(0x5AE890); }
+	//rotate the matrix by a given angle , it seems only changes within X,Y surface
 	void Rotate(float angle)
 		{ JMP_THIS(0x5AF1A0); }
 	void Identity()
