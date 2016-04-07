@@ -309,7 +309,7 @@ struct FacingStruct
 		return ret;
 	}
 
-	bool turn(const DirStruct& value) {
+	bool turn(const DirStruct& value) {		//JMP_THIS{ 0x4C9220 };
 		if(this->Value == value) {
 			return false;
 		}
