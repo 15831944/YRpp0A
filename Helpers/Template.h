@@ -77,8 +77,16 @@ public:
 		return (this->data & (1u << obj->ArrayIndex)) != 0u;
 	}
 
+	bool ContainsEx(const T obj) const {//Ares WC added
+		return (this->data & (1u << obj->ArrayIndex2)) != 0u;
+	}
+
 	void Add(const T obj) {
 		this->data |= (1u << obj->ArrayIndex);
+	}
+
+	void AddIndex(size_t idx) {//Ares WC added
+		this->data |= (1u << idx);
 	}
 
 	void Remove(const T obj) {

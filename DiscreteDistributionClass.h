@@ -102,6 +102,15 @@ public:
 		return default;
 	}
 
+	T Select(T default = T()) const {
+		this->Select(ScenarioClass::Instance->Random, &default);
+		return default;
+	}
+
+	T Select() const {
+		return this->Select(T());
+	}
+
 private:
 	DynamicVectorClass<DistributionObject<T>> Items{};
 	unsigned int TotalWeight{ 0u };

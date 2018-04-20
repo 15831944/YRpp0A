@@ -12,12 +12,13 @@ public:
 public:
 	static int &LastEventIndex;
 	static int &NextPacketIndex;
-	static NetworkEvent * const QueuedEvents; // these are really 128 length arrays
+	static UnpackedEvent/*NetworkEvent*/ * const QueuedEvents; // these are really 128 length arrays
 	static int * const QueuedEventTimestamps; // these are really 128 length arrays
+	static byte* const EventSizes;
 
 	// custom helper for Ares logics
-	static bool AddEvent(NetworkEvent *event) {
-		event->Timestamp = static_cast<DWORD>(Unsorted::CurrentFrame);
+	static bool AddEvent(UnpackedEvent/*NetworkEvent*/ *event) {
+		event->Frame = static_cast<DWORD>(Unsorted::CurrentFrame);
 		if(LastEventIndex >= 128) {
 			return false;
 		}

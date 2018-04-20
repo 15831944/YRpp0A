@@ -203,8 +203,8 @@ public:
 	}
 
 	void __fastcall DrawSHP(ConvertClass *Palette, SHPStruct *SHP, int frameIdx,
-		Point2D *pos, RectangleStruct *boundingRect, BlitterFlags flags, DWORD arg7,
-		signed int arg8, DWORD arg9, DWORD argA, int TintColor,
+		const Point2D *const pos, const RectangleStruct *const boundingRect, BlitterFlags flags, DWORD arg7,
+		int ZAdjust, DWORD arg9, int Bright, int TintColor,
 		SHPStruct *BUILDINGZ_SHA, DWORD argD, int ZS_X, int ZS_Y)
 
 			{ JMP_STD(0x4AED70); }
@@ -253,10 +253,37 @@ public:
 	static DSurface *&Alternate;
 	static DSurface *&Hidden_2;
 	static DSurface *&Composite;
-
+	static RectangleStruct & ViewBounds;
+	//static constexpr reference<RectangleStruct, 0x886FA0u> const ViewBounds{};
 
 	DSurface(int Width, int Height, bool BackBuffer, bool Force3D)
 		{ JMP_THIS(0x4BA5A0); }
+
+	static Point2D* __fastcall DrawText(
+		Point2D* pOutBuffer, wchar_t const* pText, Surface* pSurface,
+		RectangleStruct const& bounds, Point2D const& location, WORD color,
+		DWORD SURFACE_SETTING_THREE, DWORD flags, DWORD unknown9)
+	{
+		JMP_STD(0x4A5EB0);
+	}
+
+	Point2D DrawText(
+		wchar_t const* pText,  RectangleStruct const& bounds,
+		Point2D const& location, WORD color, DWORD SURFACE_SETTING_THREE,
+		DWORD flags, DWORD unknown9 = 1)
+	{
+		Point2D buffer;
+		DrawText(
+			&buffer, pText, this, bounds, location, color,
+			SURFACE_SETTING_THREE, flags, unknown9);
+		return buffer;
+	}
+
+	void DrawText(const wchar_t* pText, int X, int Y, DWORD dwColor)
+	{
+		Point2D P = { X ,Y };
+		Surface::DrawText(pText, &P, dwColor);
+	}
 
 	virtual bool BlitWhole(Surface* pSrc,bool bUnk1,bool bUnk2) R0;
 

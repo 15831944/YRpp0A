@@ -34,19 +34,8 @@ public:
 	VoxelSectionTailer * leaSectionTailer(int headerIndex, int a3)
 		{ JMP_THIS(0x7564B0); }
 
-	//
-	/*
-	TransformMatrix* GetMatrix(int &SlopIndex)
-		{ JMP_STD(0x7559B0); }
-	TransformMatrix* MatrixTransposing(int &SlopIndex)
-		{ JMP_STD(0x5AFC20); }
-	TransformMatrix* MatrixMultipleCoords(int &SlopIndex,CoordStruct crds)
-		{ JMP_STD(0x5AF4D0); }
-	TransformMatrix* MatrixMultipleCoords(int &SlopIndex, CoordStruct crds)
-	{
-		JMP_STD(0x43A0D0);
-	}
-	*/
+	bool Invalid() const
+		{ return !this || this->Initialized; }
 	
 };
 
@@ -89,7 +78,7 @@ public:
 	int span_end_off;
 	int span_data_off;
 	float DetFloat;
-	TransformMatrix TransformationMatrix;
+	Matrix3DStruct TransformationMatrix;
 	Vector3D<float> MinBounds;
 	Vector3D<float> MaxBounds;
 	char size_X;
@@ -104,7 +93,7 @@ struct VoxelSectionTailer {
 	int span_end_off;
 	int span_data_off;
 	float HVAMultiplier;
-	TransformMatrix TransformationMatrix;
+	Matrix3DStruct TransformationMatrix;
 	Vector3D<float> MinBounds;
 	int MaxBounds;
 	int field_50;

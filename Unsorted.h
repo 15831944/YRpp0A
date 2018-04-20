@@ -69,6 +69,16 @@ public:
 	static void sub_53E6B0()
 		{ JMP_STD(0x53E6B0); }
 
+	//Ares WC added:
+	static int AdjustDistanceByHeight(int distance)
+	{
+		auto adjust = 0;
+		if (distance >= 728) {
+			adjust = 1;
+		}
+		return F2I(distance * 313.5346 + adjust + 0.5);
+	}
+
 	static bool &bVideoBackBuffer;
 	static bool &bAllowVRAMSidebar;
 };
@@ -499,6 +509,11 @@ namespace Unsorted
 	static byte &CTF = *reinterpret_cast<byte*>(0xA8B31E);
 	static byte &FOW = *reinterpret_cast<byte*>(0xA8B31F);
 	static byte &MCVRedeploy = *reinterpret_cast<byte*>(0xA8B320);
+	//Ares WC added
+	static DWORD &DetailLevel = *reinterpret_cast<DWORD*>(0xA8EB78);
+	static int &DialogSetting_TechLevel = *reinterpret_cast<int*>(0x822CF4);
+
+	//end
 
 
 struct ColorPacker

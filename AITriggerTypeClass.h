@@ -13,10 +13,22 @@
 class TechnoTypeClass;
 class TeamTypeClass;
 
+//Ares WC added:
+enum class AITriggerConditionOperand : int {
+	None = -1,//helper
+	Less = 0,
+	LessEqual = 1,
+	Equal = 2,
+	GreaterEqual = 3,
+	Greater = 4,
+	NotEqual = 5
+};
+//end
+
 struct AITriggerConditionComparator
 {
-	int ComparatorType;
-	int ComparatorOperand;
+	int ComparatorValue/*ComparatorType*/;//Ares WC renamed
+	AITriggerConditionOperand ComparatorOperand;
 };
 
 class NOVTABLE AITriggerTypeClass : public AbstractTypeClass

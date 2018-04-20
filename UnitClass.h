@@ -32,6 +32,14 @@ public:
 	virtual AbstractType WhatAmI() const RT(AbstractType);
 	virtual int Size() const R0;
 
+	//ObjectClass
+	virtual UnitTypeClass* GetType() const override
+		{ return this->Type; }
+
+	//TechnoClass
+	virtual UnitTypeClass* GetTechnoType() const override
+		{ return this->Type; }
+
 	//UnitClass
 	// main drawing functions - Draw() calles one of these, they call parent's Draw_A_smth
 	virtual void DrawAsVXL(Point2D Coords, RectangleStruct BoundingRect, DWORD dwUnk7, DWORD dwUnk8)
@@ -40,10 +48,25 @@ public:
 	virtual void DrawAsSHP(Point2D Coords, RectangleStruct BoundingRect, DWORD dwUnk7, DWORD dwUnk8)
 		{ JMP_THIS(0x73C5F0); }
 
+	virtual void DrawFlash/*vt_entry_55C*/(DSurface* pSurface, Point2D coord, RectangleStruct rect, DWORD dwUnk)
+		{ JMP_THIS(0x73B140); }
+
 	// non-virtual
 
 	bool IsDeactivated() const
 		{ JMP_THIS(0x70FBD0); }
+
+	//Ares WC added:
+	void ProcessDeployWithAnim()
+		{ JMP_THIS(0x739AC0); }
+
+	void ProcessUndeployWithAnim()
+		{ JMP_THIS(0x739CD0); }
+
+	bool IsTransforming()	const
+	{ //JMP_THIS(0x746DBA);
+		return this->Deploying || this->Undeploying;
+	}
 
 	//Constructor
 	UnitClass(UnitTypeClass* pType, HouseClass* pOwner) noexcept
@@ -68,7 +91,7 @@ public:
 	bool HasFollowerCar; // yes, this vehicle has a another vehicle (a train's locomotive towing the cars)
 	bool Unloading;
 	bool unknown_bool_6D2;
-	bool TerrainPalette;
+	bool UseVoxelPainting;// TerrainPalette;
 	int unknown_int_6D4;
 	int DeathFrameCounter;
 	EBolt* ElectricBolt; //Unit is the owner of this

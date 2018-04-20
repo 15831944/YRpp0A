@@ -16,6 +16,7 @@
 
 #include <AbstractClass.h>
 ALIAS_O(DynamicVectorClass<AbstractClass *>* const, AbstractClass::Array0, 0xB0F720);
+//see in AbstractClass.h , definition changed
 
 #include <AbstractTypeClass.h>
 DECL(AbstractTypeClass, 0xA8E968);
@@ -28,6 +29,9 @@ DECL(AircraftClass, 0xA8E390);
 
 #include <AircraftTypeClass.h>
 DECL(AircraftTypeClass, 0xA8B218);
+
+#include <AirstrikeClass.h>
+DECL(AirstrikeClass, 0x889FB8);
 
 #include <AlphaShapeClass.h>
 DECL(AlphaShapeClass, 0x88A0F0);
@@ -107,6 +111,7 @@ ALIAS(DSurface *, DSurface::Hidden, 0x88730C);
 ALIAS(DSurface *, DSurface::Alternate, 0x887310);
 ALIAS(DSurface *, DSurface::Hidden_2, 0x887314);
 ALIAS(DSurface *, DSurface::Composite, 0x88731C);
+ALIAS(RectangleStruct, DSurface::ViewBounds, 0x886FA0u);
 
 #include <LoadProgressManager.h>
 ALIAS(LoadProgressManager *, LoadProgressManager::LPMgr, 0xABC9BC);
@@ -125,10 +130,12 @@ ALIAS(SHPStruct *, FileSystem::TALKBUBL_SHP, 0xAC1484);
 ALIAS(SHPStruct *, FileSystem::WRENCH_SHP, 0x89DDC8);
 ALIAS(SHPStruct *, FileSystem::POWEROFF_SHP, 0x89DDC4);
 ALIAS(SHPStruct *, FileSystem::GRFXTXT_SHP, 0xA8F794);
+ALIAS(SHPStruct *, FileSystem::OREGATH_SHP, 0xB1CF98);//Ares WC added
 ALIAS(BytePalette *, FileSystem::TEMPERAT_PAL, 0x885780);
 ALIAS(BytePalette *, FileSystem::GRFXTXT_PAL, 0xA8F790);
 ALIAS(ConvertClass *, FileSystem::CAMEO_PAL, 0x87F6B0);
 ALIAS(ConvertClass *, FileSystem::UNITx_PAL, 0x87F6B4);
+ALIAS(ConvertClass *, FileSystem::UNITPAL_Current, 0x886380);
 ALIAS(ConvertClass *, FileSystem::x_PAL, 0x87F6B8);
 ALIAS(ConvertClass *, FileSystem::GRFTXT_TIBERIUM_PAL, 0x87F6BC);
 ALIAS(ConvertClass *, FileSystem::ANIM_PAL, 0x87F6C0);
@@ -136,8 +143,10 @@ ALIAS(ConvertClass *, FileSystem::THEATER_PAL, 0x87F6C4);
 ALIAS(ConvertClass *, FileSystem::MOUSE_PAL, 0x87F6C8);
 ALIAS(ConvertClass *, FileSystem::GRFXTXT_Convert, 0xA8F798);
 
+
 #include <FootClass.h>
 DECL(FootClass, 0x8B3DC0);
+ALIAS_O(AirSpaceClass* const, AirSpaceClass::Instance, 0x887888);
 
 #include <FPSCounter.h>
 ALIAS(unsigned int, FPSCounter::CurrentFrameRate, 0xABCD44);
@@ -152,6 +161,10 @@ ALIAS_O(GameModeOptionsClass * const, GameModeOptionsClass::Instance, 0xA8B250);
 
 #include <GameOptionsClass.h>
 ALIAS_O(GameOptionsClass * const, GameOptionsClass::Instance, 0xA8EB60);
+
+#include <MPGameModeClass.h>
+ALIAS_O(MPGameModeClass * const, MPGameModeClass::Instance, 0xA8B23C);
+ALIAS_O(DynamicVectorClass<NodeNameType*>* const, MPGameModeClass::HumanPlayersData, 0xA8DA74);
 
 #include <GetCDClass.h>
 ALIAS_O(GetCDClass* const, GetCDClass::Instance, 0xA8E8E8);
@@ -228,8 +241,9 @@ ALIAS(DWORD, Networking::CurrentFrameCRC, 0xAC51FC);
 ALIAS_O(DWORD * const, Networking::LatestFramesCRC, 0xB04474);
 ALIAS(int, Networking::LastEventIndex, 0xA802C8);
 ALIAS(int, Networking::NextPacketIndex, 0xA802D0);
-ALIAS_O(NetworkEvent * const, Networking::QueuedEvents, 0xA802D4);
+ALIAS_O(UnpackedEvent/*NetworkEvent*/ * const, Networking::QueuedEvents, 0xA802D4);
 ALIAS_O(int * const, Networking::QueuedEventTimestamps, 0xA83A54);
+ALIAS_O(byte* const, Networking::EventSizes, 0x8208EC);
 
 #include <Notifications.h>
 ALIAS(PointerExpiredNotification, PointerExpiredNotification::NotifyInvalidAnim, 0xB0F5B8);
@@ -269,6 +283,7 @@ DECL(ParticleClass, 0xA83DC8);
 
 #include <ParticleSystemClass.h>
 DECL(ParticleSystemClass, 0xA80208);
+ALIAS(ParticleSystemClass* , ParticleSystemClass::Intermediate, 0xA8ED78);
 
 #include <ParticleSystemTypeClass.h>
 DECL(ParticleSystemTypeClass, 0xA83D68);
@@ -299,6 +314,9 @@ DECL(RadSiteClass, 0xB04BD0);
 #include <RulesClass.h>
 ALIAS(RulesClass*, RulesClass::Instance, 0x8871E0);
 //bool RulesClass::Initialized = false;
+
+#include <RadarEventClass.h>
+DECL(RadarEventClass , 0xB04DA8);
 
 #include <ScenarioClass.h>
 ALIAS(ScenarioClass*, ScenarioClass::Instance, 0xA8B230);
@@ -578,6 +596,9 @@ ALIAS(bool, VocClass::VoicesEnabled, 0x8464AC);
 
 #include <EBolt.h>
 DECL(EBolt, 0x8A0E88);
+
+#include <FoggedObjectClass.h>
+DECL(FoggedObjectClass, 0x8B3D10);
 
 #include <LineTrail.h>
 DECL(LineTrail, 0xABCB78);

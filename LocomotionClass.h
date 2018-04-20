@@ -74,10 +74,10 @@ public:
 		{ return true; }
 
 	//virtual TransformMatrix* __stdcall Draw_Matrix(TransformMatrix* pMatrix, int* key)
-	virtual  TransformMatrix* __stdcall Draw_Matrix(TransformMatrix* pMatrix, int* key)
+	virtual  Matrix3DStruct* __stdcall Draw_Matrix(Matrix3DStruct* pMatrix, int* key)
 		{ JMP_STD(0x55A730); }
 
-	virtual  TransformMatrix* __stdcall Shadow_Matrix(TransformMatrix* pMatrix, int* key)
+	virtual  Matrix3DStruct* __stdcall Shadow_Matrix(Matrix3DStruct* pMatrix, int* key)
 		{ JMP_STD(0x55A7D0); }
 
 	virtual Point2D* __stdcall Draw_Point(Point2D* pPoint)
@@ -292,7 +292,7 @@ protected:
 
 public:
 
-	UnitClass *Owner;
+	FootClass* Owner;
 	FootClass* LinkedTo;	//This Locomotor is linked to this object.
 	bool Powered;	//Does this Locomotor currently have power?
 	bool Dirty;		//bIsDirty - Has something changed?

@@ -6,6 +6,14 @@
 
 #include <TechnoTypeClass.h>
 
+//Ares WC added
+struct SequenceSoundStruct
+{
+	int SoundStartFrame;
+	int SoundIndex; // VocClass
+};
+//end
+
 struct SubSequenceStruct
 {
 	int StartFrame;
@@ -13,10 +21,13 @@ struct SubSequenceStruct
 	int FacingMultiplier;
 	SequenceFacing Facing;
 	int SoundCount;
+	SequenceSoundStruct Sound[2];
+	/*
 	int Sound1StartFrame;
 	int Sound1Index; // VocClass
 	int Sound2StartFrame;
 	int Sound2Index; // VocClass
+	*/
 };
 
 struct SequenceStruct

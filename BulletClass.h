@@ -108,6 +108,10 @@ public:
 		}
 	}
 
+	char* get_ID() const {
+		return this->Type ? this->Type->ID : nullptr;
+	}
+
 	//Constructor
 protected:
 	BulletClass() noexcept
@@ -134,7 +138,8 @@ public:
 	BulletVelocity Velocity;
 	DWORD unknown_100;
 	bool unknown_104;
-	DWORD unknown_108;
+	bool CourseLocked;
+	int CourseLockedDuration;//DWORD unknown_108;
 	AbstractClass* Target;
 	int Speed;
 	int InheritedColor;

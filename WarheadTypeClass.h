@@ -10,6 +10,7 @@
 class AnimTypeClass;
 class ParticleTypeClass;
 class VoxelAnimTypeClass;
+class ObjectClass;//Ares WC added
 
 struct WarheadFlags {
 	bool ForceFire;
@@ -17,6 +18,18 @@ struct WarheadFlags {
 	bool PassiveAcquire;
 
 	WarheadFlags(bool FF = true, bool Retal = true, bool Acquire = true) : ForceFire(FF), Retaliate(Retal), PassiveAcquire(Acquire) {};
+};
+
+//Ares WC shifted here
+struct DamageGroup {
+	ObjectClass* Target;
+	int Distance;
+
+	DamageGroup(ObjectClass* pTarget, int distance) 
+	{
+		this->Target = pTarget;
+		this->Distance = distance;
+	}
 };
 
 class NOVTABLE WarheadTypeClass : public AbstractTypeClass

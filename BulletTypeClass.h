@@ -102,7 +102,7 @@ public:
 	bool Vertical;
 	double Elasticity;
 	int Acceleration;
-	ColorScheme* Color;
+	int Color; //ColorScheme* Color; -Zero Fanker : after the testing , this is confirmed as idx of the array
 	AnimTypeClass* Trailer;
 	int ROT;
 	int CourseLockDuration;

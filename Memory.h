@@ -45,14 +45,35 @@ namespace YRMemory {
 	// naked does not support inlining. the inline modifier here means that
 	// multiple definitions are allowed.
 
+	auto constexpr __nh_malloc = 0x07C9442u;
+	auto constexpr _free = 0x7C93E8u;
 	// the game's operator new
 	__declspec(naked) inline void* __cdecl Allocate(size_t sz) {
-		JMP(0x7C8E17);
+		//JMP(0x7C8E17);
+		__asm  {
+			push    1
+			//begin feature
+			add    dword ptr[esp + 8],4//push    dword ptr[esp + 8]
+			push  dword ptr[esp + 8]
+			//end feature	
+			mov	  eax, 0x07C9442//__nh_malloc
+			call	  eax
+			pop     ecx
+			pop     ecx
+			retn
+		}
 	}
 
 	// the game's operator delete
 	__declspec(naked) inline void __cdecl Deallocate(const void* mem) {
-		JMP(0x7C8B3D);
+		//JMP(0x7C8B3D);
+		__asm {
+		push    dword ptr[esp + 4]
+		mov	  eax, 0x7C93E8//_free
+		call	  eax
+		pop     ecx
+		retn
+		}
 	}
 
 	__declspec(noinline) inline void* AllocateChecked(size_t sz) {
@@ -60,6 +81,7 @@ namespace YRMemory {
 			return ptr;
 		}
 		std::terminate();
+		return nullptr;
 	}
 }
 

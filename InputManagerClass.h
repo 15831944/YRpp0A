@@ -27,6 +27,10 @@ public:
 			|| this->IsKeyPressed(GameOptionsClass::Instance->KeyForceSelect2);
 	}
 
+	//check whether the game is focused , and ready to input any key
+	bool HasFocus()
+		{ JMP_THIS(0x54F000); }
+
 protected:
   int field_0;
   int field_4;

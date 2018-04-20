@@ -102,6 +102,11 @@ public:
 		SetRadLevel(nRadLevel);
 	}
 
+	//helper
+	const char* get_ID() const {
+		return nullptr;
+	}
+
 protected:
 	explicit __forceinline RadSiteClass(noinit_t) noexcept
 		: AbstractClass(noinit_t())

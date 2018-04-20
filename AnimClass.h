@@ -44,6 +44,21 @@ public:
 	void SetOwnerObject(ObjectClass *pOwner)
 		{ JMP_THIS(0x424B50); }
 
+	//Ares WC added:
+	void SetOwnerHouse(HouseClass* pHouse) {
+		this->Owner = pHouse;
+	} //0x424CA0
+
+	void AnimExpired()
+		{ JMP_THIS(0x424F00); }
+		
+	void AnimClass_DTOR()
+		{ JMP_THIS(0x4228E0); }
+
+	char* const get_ID()
+		{ return this->Type->ID; }
+	//end
+
 	void Pause() {
 		this->Paused = true;
 		this->Unpaused = false;

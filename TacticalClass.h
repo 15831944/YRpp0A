@@ -13,7 +13,10 @@ public:
 
 	static TacticalClass * &Instance;
 
-	Point2D* CoordsToClient(CoordStruct* pCoords, Point2D* pDest)
+	bool CoordsToClient(CoordStruct const& coords, Point2D* pOutClient) const
+		{ JMP_THIS(0x6D2140); }
+
+	Point2D* CoordsToClient(const CoordStruct* pCoords, Point2D* pDest)
 		{ JMP_THIS(0x6D2140); }
 	/*
 	static Point2D* CoordsToClient(CoordStruct* pCrd, Point2D* pPoint)
@@ -25,8 +28,8 @@ public:
 		THISCALL_EX(pTactical, 0x6D2140);
 	}*/
 
-	CoordStruct* ClientToCoords(Point2D* pClient, CoordStruct* pDest)
-			{ JMP_THIS(0x6D2280); }
+	CoordStruct* ClientToCoords(CoordStruct* pDest, Point2D* pClient)
+			{ JMP_THIS(0x6D2280); }//6D6590 this too
 	/*
 	static CoordStruct* ClientToCoords(Point2D* pPoint, CoordStruct* pCrd)
 	{
@@ -61,6 +64,9 @@ public:
 
 	static int DrawTimer(int index, ColorScheme *Scheme, int Time, wchar_t *Text, Point2D *someXY1, Point2D *someXY2)
 		{ JMP_STD(0x64DB50); }
+
+protected:
+	TacticalClass()  { JMP_THIS(0x6D1C20); }
 
 public:
 

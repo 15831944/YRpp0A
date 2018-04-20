@@ -73,8 +73,17 @@ public:
 	 * failing that, calls FindTechnoNearestTo,
 	 * if that fails too, reiterates Content looking for Terrain
 	 */
-	ObjectClass* GetSomeObject(const CoordStruct& coords, bool alt) const
+	//Ares WC changed : -Zero Fanker 20170226
+	//ObjectClass* GetSomeObject(const CoordStruct& coords, bool alt) const
+	ObjectClass* GetSomeObject(const Point2D& coords, bool alt) const
 		{ JMP_THIS(0x47C5A0); }
+
+	ObjectClass* GetSomeObject(const CoordStruct& coords, bool alt) const
+	{
+		auto coord2D = Point2D{ coords.X,coords.Y };
+		return this->GetSomeObject(coord2D, alt);
+	}
+
 
 	// misc
 	void SetWallOwner()
@@ -99,6 +108,21 @@ public:
 
 	bool CanThisExistHere(SpeedType SpeedType, BuildingTypeClass* pObject, HouseClass* pOwner) const
 		{ JMP_THIS(0x47C620); }
+
+	//Ares WC added:
+	//it is called when unit class is checking deploy to fire
+	bool IsIllegalLandType() const
+		{ JMP_THIS(0x487C10); }
+
+	int GetNearbyTerrainHeight(Point2D &offsetCoords) const
+		{ JMP_THIS(0x47B3A0); }
+
+	int GetJumpjetHeightAdjust() const
+		{ JMP_THIS(0x485080); }
+	//end
+
+	bool CanPutTiberium(DWORD pTib = 0)
+		{ JMP_THIS(0x4838E0); }
 
 	// those unks are passed to TechnoClass::Scatter in that same order
 	void ScatterContent(const CoordStruct &crd, bool ignoreMission, bool ignoreDestination, bool alt)
@@ -183,14 +207,14 @@ public:
 		{ return this->SensorsOfHouses[idx] > 0; }
 
 	void Sensors_AddOfHouse(unsigned int idx)
-		{ ++this->SensorsOfHouses[idx]; }
+		{ ++this->SensorsOfHouses[idx]; }//0x487150
 
 	void Sensors_RemOfHouse(unsigned int idx)
 		{ --this->SensorsOfHouses[idx]; }
 
 	// disguise sensors
 	bool DisguiseSensors_InclHouse(unsigned int idx) const
-		{ return this->DisguiseSensorsOfHouses[idx] > 0; }
+		{ return this->DisguiseSensorsOfHouses[idx] > 0; }//sub_4870F0 
 
 	void DisguiseSensors_AddOfHouse(unsigned int idx)
 		{ ++this->DisguiseSensorsOfHouses[idx]; }
@@ -384,7 +408,7 @@ public:
 	DWORD              unknown_104;
 	WORD               unknown_108;
 	WORD               unknown_10A;
-	WORD               unknown_10C;
+	WORD               ExtraGlow;//unknown_10C;
 	WORD               unknown_10E;
 	WORD               unknown_110;
 	WORD               unknown_112;

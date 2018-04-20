@@ -86,6 +86,15 @@ public:
 	int        Attempts;
 };
 
+//helper
+Edge __forceinline GetEdgeOrDefault(Edge edge, Edge defaultEdge = Edge::North)
+{
+	if (edge < Edge::North || edge > Edge::West) {
+		edge = defaultEdge;
+	}
+	return edge;
+}
+
 //--- BaseClass - holds information about a player's base!
 class HouseClass;	//forward declaration needed
 
@@ -220,9 +229,18 @@ public:
 		{ JMP_THIS(0x4F9B70); }
 	void MakeEnemy(HouseClass* pWho, bool bAnnounce)
 		{ JMP_THIS(0x4F9F90); }
+	void MakeEnemy(int EnemyHouseIdx, bool bAnnounce)
+	{
+		auto pHouse = HouseClass::Array->GetItem(EnemyHouseIdx);
+		this->MakeEnemy(pHouse, bAnnounce);
+	}
+		//{ JMP_THIS(0x4F9F70); }
 
 	void AllyAIHouses()
 		{ JMP_THIS(0x501640); }
+
+	void AcquiredConYard()
+		{ JMP_THIS(0x505180); }
 
 	// no explosions, just poooof
 	void SDDTORAllAndTriggers()
@@ -416,6 +434,7 @@ public:
 	}
 
 	// whether the human player on this PC can control this house
+	// better name : controlled by local player - Zero Fanker
 	bool ControlledByPlayer() const { // { JMP_THIS(0x50B6F0); }
 		if(SessionClass::Instance->GameMode != GameMode::Campaign) {
 			return this->IsPlayer();
@@ -436,6 +455,47 @@ public:
 
 	BuildingClass* FindBuildingOfType(int idx, int sector = -1) const
 		{ JMP_THIS(0x4FD060); }
+
+	//Ares WC added:
+	//these two bellow have been rewritten entirely by ares official methods
+	//but i need this for the one-time super weapon
+	void UpdateSuperWeaponsOwned()
+		{ JMP_THIS(0x50AF10); }
+
+	void UpdateSuperWeaponsUnavailable()
+		{ JMP_THIS(0x50B1D0); }
+
+	Edge GetStartingEdge() const
+		{ return GetEdgeOrDefault(this->StartingEdge, GetCurrentEdge()); }
+
+	Edge GetCurrentEdge() const
+		{ return GetEdgeOrDefault(this->Edge); }//{ JMP_THIS(0x50DA80); }
+
+	void AI_GatherAndDefendConYard()
+		{ JMP_THIS(0x50C920); }
+	
+	double GetArmorMultipleByTechno(TechnoTypeClass* pTechnoType)
+		{ JMP_THIS(0x50BD30); }
+
+	void UpdateHouseColor()
+		{ JMP_THIS(0x50B840); }
+
+	void UpdateLaserColor()
+		{ JMP_THIS(0x50BA00); }
+
+	void MultiplayerInit(int ColorSchemeIdx, int HouseTypeIdx, int CreditAmount)
+		{ JMP_THIS(0x4FCE00); }
+
+	void AdjustDataAccordingToDifficulty(AIDifficulty difficulty)
+		{ JMP_THIS(0x4F6EC0); }
+
+	double GetBaseCostMultiple(TechnoTypeClass* const pType) const
+		{ JMP_THIS(0x50BDF0); }
+
+	double GetActiveCostMultiple(TechnoTypeClass* const pType) const
+		{ JMP_THIS(0x50BEB0); }
+
+	//end add
 
 	AnimClass * __fastcall PsiWarn(CellClass *pTarget, BulletClass *Bullet, char *AnimName)
 		JMP_THIS(0x43B5E0);
@@ -571,7 +631,7 @@ public:
 
 	int CanBuild(TechnoTypeClass const* pItem, bool buildLimitOnly, bool includeInProduction) const
 		{ JMP_THIS(0x4F7870); }
-	//this was used in 0.8, i am not sure if there is a better function -Zero Fanker
+	//provided by AlexB , confirmed to be correct -Zero Fanker
 	bool AbandonProductionOf(AbstractType abs, int index, bool isNaval, bool allInQueue)
 		{ JMP_THIS(0x4FAA10); }
 
@@ -625,7 +685,7 @@ public:
 		} else {
 			return this->BaseSpawnCell;
 		}
-	}
+	}//0x50DEF0
 
 	unsigned int GetAIDifficultyIndex() const {
 		return static_cast<unsigned int>(this->AIDifficulty);
@@ -909,7 +969,7 @@ public:
 	int                   AttackDelayB; // both unused
 	int                   EnemyHouseIndex;
 	DynamicVectorClass<AngerStruct> AngerNodes; //arghghghgh bugged
-	DynamicVectorClass<ScoutStruct> ScoutNodes; // filled with data which is never used, jood gob WW
+	DynamicVectorClass<ScoutStruct> ScoutNodes; // filled with data which is never used, jood gob WW // Maybe you should take a look at script "48,0" - Zero Fanker
 	TimerStruct unkTimer3;
 	TimerStruct unkTimer4;
 	int                   ProducingBuildingTypeIndex;

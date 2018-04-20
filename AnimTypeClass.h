@@ -32,7 +32,7 @@ public:
 
 	//AnimTypeClass
 	virtual SHPStruct* LoadImage() R0;
-	virtual void Load2DArt() RX;
+	virtual void Load2DArt(TheaterType TheaterIdx) RX;//Ares WC fixed
 
 	//Destructor
 	virtual ~AnimTypeClass() RX;

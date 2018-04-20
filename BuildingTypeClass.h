@@ -19,9 +19,9 @@ struct BuildingAnimStruct
 
 struct BuildingAnimFrameStruct
 {
-	DWORD dwUnknown;
-	int FrameCount;
-	int FrameDuration;
+	int  StartFrame;
+	int Frames;
+	int Duration;
 };
 
 class NOVTABLE BuildingTypeClass : public TechnoTypeClass

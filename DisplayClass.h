@@ -40,7 +40,7 @@ public:
 		{ JMP_THIS(0x55BAE0); }
 
 	void Update()
-		{ JMP_THIS(0x55BAE0); }
+		{ JMP_THIS(0x55AFB0); }
 };
 
 class NOVTABLE DisplayClass : public MapClass
@@ -115,6 +115,17 @@ public:
 	/* marks or unmarks the cells pointed to by CurrentFoundationData as containing a building */
 	void MarkFoundation(CellStruct * BaseCell, bool Mark)
 		{ JMP_THIS(0x4A95A0); }
+
+	//Ares WC added:
+	bool SetFollowObject(ObjectClass* pObj) const
+		{ JMP_THIS(0x4AEB30); }
+
+	ObjectClass* GetFollowObject() const
+		{ JMP_THIS(0x4AEB10); }
+
+	static TechnoClass* __fastcall SelectLeadingTechno(CellStruct* cellBuffer, ObjectClass* pObj)
+		{ JMP_STD(0x5353D0); }
+	//end add
 
 protected:
 	//Constructor

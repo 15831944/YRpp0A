@@ -4,6 +4,8 @@
 #include <MPGameModeClass.h>
 #include <GameModeOptionsClass.h>
 
+struct NodeNameType;
+
 struct GameTypePreferencesStruct {
 	DWORD idxMPMode;
 	DWORD idxScenario;
@@ -20,37 +22,25 @@ struct GameTypePreferencesStruct {
 
 struct PlayerData {
 	byte Data[10];
-	PROTECTED_PROPERTY(BYTE, align_A[2])
-};
+	PROTECTED_PROPERTY(BYTE, align_A[2]);
 
-#pragma pack(push, 1)
-struct NodeNameType {
-	wchar_t Name[20];
-	PlayerData Data;
-	char Serial[23];
-	int Country;
-	int InitialCountry;
-	int Color;
-	int InitialColor;
-	int StartPoint;
-	int InitialStartPoint;
-	int Team;
-	int InitialTeam;
-	DWORD unknown_int_6B;
-	int HouseIndex;
-	int Time;
-	DWORD unknown_int_77;
-	int Clan;
-	DWORD unknown_int_7F;
-	BYTE unknown_byte_83;
-	BYTE unknown_byte_84;
+	void Init()
+		{ memset(this->Data, 0xFFu, 10); }
 };
-#pragma pack(pop)
 
 class SessionClass
 {
 public:
 	static SessionClass* const Instance;
+
+	//Ares WC added:
+	static wchar_t* __fastcall HandleToWstring(char* handle)
+		{ JMP_STD(0x735120); }
+
+	static int __fastcall GetPlayerNumCapacity(int ScenarioIndex)
+		{ JMP_STD(0x5E6520); }
+
+	//end
 
 	GameMode GameMode;
 	MPGameModeClass* MPGameMode;
@@ -63,9 +53,9 @@ public:
 	char Handle[20];
 	int PlayerColor;
 	DWORD unknown_160;
-	DWORD unknown_164;
+	int StartPoint;//DWORD unknown_164;
 	DWORD unknown_168;
-	DWORD unknown_16C;
+	int Team;// DWORD unknown_16C;
 	DWORD unknown_170;
 	int idxSide;
 	int idxSide2;
@@ -89,3 +79,39 @@ public:
 	PROTECTED_PROPERTY(DWORD, unknown_2854[0x221]);
 	bool CurrentlyInGame; // at least used for deciding dialog backgrounds
 };
+
+#pragma pack(push, 1)
+struct NodeNameType {
+	wchar_t Name[20];
+	PlayerData Data;
+	char Serial[23];
+	int Country;
+	int InitialCountry;
+	int Color;
+	int InitialColor;
+	int StartPoint;
+	int InitialStartPoint;
+	int Team;
+	int InitialTeam;
+	DWORD unknown_int_6B;
+	int HouseIndex;
+	int Time;
+	DWORD unknown_int_77;
+	int Clan;
+	DWORD unknown_int_7F;
+	BYTE unknown_byte_83;
+	BYTE unknown_byte_84;
+
+	NodeNameType()
+	{
+		this->Data.Init();
+		wchar_t* handle = SessionClass::HandleToWstring(SessionClass::Instance->Handle);
+		wcscpy_s(this->Name, handle);
+		this->Country = SessionClass::Instance->idxSide;
+		this->Color = SessionClass::Instance->PlayerColor;
+		this->StartPoint = SessionClass::Instance->StartPoint;
+		this->Team = SessionClass::Instance->Team;
+		this->Time = -1;
+	}
+};
+#pragma pack(pop)

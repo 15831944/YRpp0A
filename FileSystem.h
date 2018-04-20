@@ -35,12 +35,14 @@ public:
 	static SHPStruct *&WRENCH_SHP;
 	static SHPStruct *&POWEROFF_SHP;
 	static SHPStruct *&GRFXTXT_SHP;
+	static SHPStruct *&OREGATH_SHP;//this one is used for ore gathering effect "OREGATH.SHP"
 
 	static BytePalette *&TEMPERAT_PAL;
 	static BytePalette *&GRFXTXT_PAL;
 
 	static ConvertClass *&CAMEO_PAL;
 	static ConvertClass *&UNITx_PAL;
+	static ConvertClass *&UNITPAL_Current;
 	static ConvertClass *&x_PAL;
 	static ConvertClass *&GRFTXT_TIBERIUM_PAL;
 	static ConvertClass *&ANIM_PAL;

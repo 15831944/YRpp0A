@@ -19,6 +19,10 @@ public:
 		}
 		return reinterpret_cast<const CellStruct*>(0x89F688)[direction];
 	}
+	//this one often used in locomotion methods
+	static const  Vector2D<int>& GetNeighbourCoordOffset(short direction) {
+		return reinterpret_cast<const Vector2D<int>*>(0x89F6D8)[direction];
+	}
 
 	static size_t GetDistance(int dx, int dy) {
 		auto x = static_cast<size_t>(std::abs(dx));

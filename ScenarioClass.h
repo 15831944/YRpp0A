@@ -3,6 +3,9 @@
 #include <GeneralDefinitions.h>
 #include <Randomizer.h>
 #include <ArrayClasses.h>
+//Ares WC added
+#include <CellClass.h>
+#include <MapClass.h>
 #include <TechnoTypeClass.h>
 
 struct Variable
@@ -83,10 +86,17 @@ public:
 		return dest;
 	}
 
+	//Ares WC added:
+	CellClass* GetWaypointCell(int WaypointIndex) const {
+		return MapClass::Instance->GetCellAt(this->Waypoints[WaypointIndex]);
+	}//{ JMP_THIS(0x68BCE0); }
+	//end add
+
 	//CTOR / DTOR
 protected:
 	ScenarioClass() { THISCALL(0x6832C0); }
-	~ScenarioClass() { THISCALL(0x667A30); }
+	~ScenarioClass() { THISCALL(0x6BEAC3); }//this not acutally a seperate function , 
+																//because this function is inlined in WinMain
 
 public:
 	//Properties

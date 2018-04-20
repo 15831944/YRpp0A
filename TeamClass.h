@@ -7,6 +7,8 @@ class FootClass;
 class CellClass;
 class ScriptClass;
 class TagClass;
+class BuildingClass;
+class BuildingTypeClass;
 
 class NOVTABLE TeamClass : public AbstractClass
 {
@@ -34,6 +36,34 @@ public:
 	void LiberateMember(FootClass* pFoot, int idx=-1, byte count=0)
 		{ JMP_THIS(0x6EA870); }
 
+	void SetFocus(AbstractClass* pFocus)
+		{ JMP_THIS(0x6E9050); }
+
+	void AttackFocus() 
+		{ JMP_THIS(0x6EB490); }
+
+	//Ares WC added:
+	//check whether the team will still heading to destination
+	bool IsStillGathering() const
+		{ JMP_THIS(0x6EBF50); }
+
+	bool IsUnitRecruitable(FootClass *pUnit, int *pEntryIdx, bool forced)
+		{ JMP_THIS(0x6EA610); }
+
+	bool AddMember(FootClass *pNewMember, bool Forced= false) const
+		{ JMP_THIS(0x6EA500); }
+
+	bool AddCapturedMemeber(FootClass *pVictim)const
+	{
+		return  this->AddMember(pVictim, true);
+	}//0x6EA4F0
+		
+
+	static BuildingClass* __fastcall PickUpSpecificBuildingTarget(
+		BuildingTypeClass *pBldType, HouseClass *pEnemyHouse,
+		FootClass *pAttacker, int AttackType, char OnlyTargetHouseEnemy)
+		{ JMP_STD(0x6EEBD0); }
+		
 	//AbstractClass
 	virtual AbstractType WhatAmI() const RT(AbstractType);
 	virtual int Size() const R0;
@@ -75,12 +105,12 @@ public:
 	bool           unknown_76;
 	bool           unknown_77;
 
-	bool           unknown_78;
+	bool           TeamIsFull;// unknown_78; - means current member amount equals taskforce count
 	bool           unknown_79;
-	bool           unknown_7A;
+	bool           NeedsReinforce;// unknown_7A;
 	bool           unknown_7B;
 
-	bool           unknown_7C;
+	bool           NeedsGathering;//unknown_7C;
 	bool           NeedsToDisappear;
 	bool           unknown_7E;
 	bool           unknown_7F;

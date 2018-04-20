@@ -389,3 +389,30 @@ protected:
 		}
 	}
 };
+
+
+/*
+	Zero Fanker : 
+	attempt to iterate cells from centre to border , equally
+
+
+*/
+/*class CellCentreSpreadEnumerator
+{
+	CellStruct Centre;
+	int Range;
+	int Interval = -1;
+	short CurrentDirection;
+
+public:
+	CellCentreSpreadEnumerator(const CellStruct& centre, const int range,const int interval) :
+		Centre(centre),
+		Range(range),
+		Interval(interval)
+	{
+		short startDir = ScenarioClass::Instance ->Random.RandomRanged(0, 8);
+		CurrentDirection = startDir;
+
+
+	}
+};*/

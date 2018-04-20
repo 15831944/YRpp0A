@@ -13,6 +13,9 @@ class NOVTABLE AirstrikeClass : public AbstractClass
 public:
 	static const AbstractType AbsID = AbstractType::Airstrike;
 
+	//Static
+	static DynamicVectorClass<AirstrikeClass*>* const Array;
+
 	//IPersist
 	virtual HRESULT __stdcall GetClassID(CLSID* pClassID) R0;
 
@@ -30,6 +33,21 @@ public:
 	//non-virtual
 	void StartMission(ObjectClass* pTarget)
 		{ JMP_THIS(0x41D830); }
+
+	void SetTarget(AbstractClass* pTarget)
+		{ JMP_THIS(0x41DA20); }
+
+	bool IsLegalTarget(AbstractClass* pTarget)
+		{ JMP_THIS(0x41D7E0); }
+
+	void ResetTarget()
+		{ JMP_THIS(0x41DB40); }
+
+	void RemoveMember(FootClass* pMember)
+		{ JMP_THIS(0x41DC80); }
+
+	void InvaidatePointer(AbstractClass* pAbstract)
+		{ JMP_THIS(0x41D540); }
 
 	//Constructor
 	AirstrikeClass(TechnoClass* pOwner) noexcept

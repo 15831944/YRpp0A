@@ -17,7 +17,12 @@ public:
 
 	// static
 	static DynamicVectorClass<DiskLaserClass*>* const Array;
-
+	static const Point2D* Circle()
+		{ return *reinterpret_cast<Point2D**>(0x8A0180); }
+	/* each point from Circle()
+	int ForX[16] = {    0,	 89,   169, 220,  240,  222,169, 93,   0, -89,-169,-220,-240,-222,-137,  -54 };
+	int ForY[16] = { -240,-222,-169,  -93,	  0,	 89, 169,220,240,222,169,  93,     0,   -89,-196,-233 };
+	*/
 	//IPersist
 	virtual HRESULT __stdcall GetClassID(CLSID* pClassID) R0;
 
@@ -58,8 +63,8 @@ public:
 	TechnoClass* Owner;
 	TechnoClass* Target;
 	WeaponTypeClass* Weapon;
-	DWORD unknown_30;
-	DWORD unknown_34;
-	DWORD unknown_38;
+	int DrawRateCounter;//dec per update
+	DWORD Facing;//0-15
+	int DrawCounter;//inc per draw
 	int Damage;
 };

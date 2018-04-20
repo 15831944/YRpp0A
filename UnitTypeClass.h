@@ -80,10 +80,11 @@ public:
 	int Facings;
 	int FiringSyncFrame0;
 	int FiringSyncFrame1;
-	int BurstDelay0;
+	int BurstDelay[4];//Ares WC changed
+	/*int BurstDelay0;
 	int BurstDelay1;
 	int BurstDelay2;
-	int BurstDelay3;
+	int BurstDelay3;*/
 	SHPStruct* AltImage;
 	char WalkFrames;
 	char FiringFrames;

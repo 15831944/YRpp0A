@@ -133,12 +133,24 @@ public:
 	{
 		return Vector3D{ X + a.X, Y + a.Y, Z + a.Z };
 	}
+	//addtion helper
+	Vector3D<T> operator+(const Vector2D<T>& a) const
+	{
+		return Vector3D<T>{ X + a.X, Y + a.Y, Z};
+	}
 	//addition
 	Vector3D& operator+=(const Vector3D& a)
 	{
 		X += a.X;
 		Y += a.Y;
 		Z += a.Z;
+		return *this;
+	}
+	//addtion helper
+	Vector3D<T>& operator+=(const Vector2D<T>& a)
+	{
+		X += a.X;
+		Y += a.Y;
 		return *this;
 	}
 	//substraction
@@ -202,7 +214,7 @@ public:
 	{
 		return *this * *this;
 	}
-	//distance from another vector
+	//distance from another vector (always non-negative value)
 	double DistanceFrom(const Vector3D& a) const
 	{
 		return (a - *this).Magnitude();
@@ -211,6 +223,12 @@ public:
 	double DistanceFromSquared(const Vector3D& a) const
 	{
 		return (a - *this).MagnitudeSquared();
+	}
+	double DistanceFrom2D(const Vector3D<T>& a) const//Ares WC added
+	{
+		auto a2D = (Vector2D<T>*)&a;
+		auto this2D = (Vector2D<T>*)this;
+		return (*a2D - *this2D).Magnitude();
 	}
 	//collinearity
 	bool IsCollinearTo(const Vector3D& a) const

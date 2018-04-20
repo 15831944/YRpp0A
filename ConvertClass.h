@@ -89,7 +89,7 @@ public:
 	//Destructor
 	virtual ~LightConvertClass() RX;
 
-	void UpdateColors(int Red, int Green, int Blue, bool bUnknown)
+	virtual void UpdateColors(int Red, int Green, int Blue, bool bUnknown)
 		{ JMP_THIS(0x556090); }
 
 	//Constructor

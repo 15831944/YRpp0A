@@ -46,8 +46,28 @@ public:
 	virtual AbstractType WhatAmI() const RT(AbstractType);
 	virtual int	Size() const R0;
 
+	//ObjectClass
+	virtual AircraftTypeClass* GetType() const override
+		{ return this->Type; }
+
+	//TechnoClass
+	virtual AircraftTypeClass* GetTechnoType() const override
+		{ return this->Type; }
+
 	//Destructor
 	virtual ~AircraftClass() RX;
+
+	//Ares WC added:
+	//Non-virtual
+	void Mission_Move_Carryall()
+		{ JMP_THIS(0x416D50); }
+
+	void ParaDropFirstPassenger()
+		{ JMP_THIS(0x415C60); }
+
+	void AircraftClass_DTOR()
+		{ JMP_THIS(0x414080); }
+	//end add
 
 	//Constructor
 	AircraftClass(AircraftTypeClass* pType, HouseClass* pOwner) noexcept
@@ -69,7 +89,7 @@ public:
 	bool unknown_bool_6C8;
 	bool HasPassengers;	//parachutes
 	bool IsKamikaze; // when crashing down, duh
-	DWORD unknown_6CC;
+	BuildingClass* DockerNowHeading;//DWORD unknown_6CC;
 	bool unknown_bool_6D0;
 	bool unknown_bool_6D1;
 	bool unknown_bool_6D2;

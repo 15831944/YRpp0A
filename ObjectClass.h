@@ -6,6 +6,7 @@
 
 #include <AbstractClass.h>
 #include <Audio.h>
+#include <MapClass.h>//Ares WC added
 #include <ObjectTypeClass.h>
 #include <TagClass.h>
 
@@ -51,12 +52,12 @@ public:
 	//AbstractClass
 
 	//ObjectClass
-	virtual void AnimPointerExpired(AnimClass* pAnim) RX;
+	virtual void AnimPointerExpired(AnimClass* pAnim) RX;//this->Parachute = nullptr
 	virtual bool IsSelectable() const R0;
 	virtual VisualType VisualCharacter(VARIANT_BOOL SpecificOwner, HouseClass * WhoIsAsking) const RT(VisualType);
 	virtual SHPStruct* GetImage() const R0;
-	virtual Action MouseOverCell(CellStruct const& cell, bool checkFog = false, bool ignoreForce = false) const RT(Action);
-	virtual Action MouseOverObject(ObjectClass const* pObject, bool ignoreForce = false) const RT(Action);
+	virtual Action GetActionOnCell(CellStruct const& cell, bool checkFog = false, bool ignoreForce = false) const RT(Action);//Old name : GetCursorOverCell
+	virtual Action GetActionOnObject(ObjectClass const* pObject, bool ignoreForce = false) const RT(Action);//Old name : GetCursorOverObject
 	virtual Layer InWhichLayer() const RT(Layer);
 	virtual bool IsSurfaced() R0; // opposed to being submerged
 
@@ -162,15 +163,15 @@ public:
 	virtual int GetWeaponRange(int idxWeapon) const R0;
 	virtual DamageState ReceiveDamage(int* pDamage, int DistanceFromEpicenter, WarheadTypeClass* pWH,
 	  ObjectClass* Attacker, bool IgnoreDefenses, bool PreventPassengerEscape, HouseClass* pAttackingHouse) RT(DamageState);
-	virtual void Destroy() RX;
+	virtual bool/*void*/ FreeMindControlledUnits/*Destroy*/() RX;
 	virtual void Scatter(const CoordStruct &crd, bool ignoreMission, bool ignoreDestination) RX;
 	virtual bool Ignite() R0;
 	virtual void Extinguish() RX;
 	virtual DWORD GetPointsValue() const R0;
 	virtual Mission GetCurrentMission() const RT(Mission);
 	virtual void RestoreMission(Mission mission) RX;
-	virtual void UpdatePosition(int dwUnk) RX;
-	virtual BuildingClass* FindFactory(bool allowOccupied, bool requirePower) const R0;
+	virtual void UpdatePosition(int position) RX;//UpdatePosition(int dwUnk) RX;
+	virtual BuildingClass* FindFactoryBuilding(bool allowOccupied, bool requirePower) const R0;
 	virtual RadioCommand ReceiveCommand(TechnoClass* pSender, RadioCommand command, AbstractClass* &pInOut) RT(RadioCommand);
 	virtual bool DiscoveredBy(HouseClass *pHouse) R0;
 	virtual void SetRepairState(int state) RX; // 0 - off, 1 - on, -1 - toggle
@@ -178,12 +179,21 @@ public:
 	virtual void AssignPlanningPath(signed int idxPath, signed char idxWP) RX;
 	virtual void vt_entry_1A8(DWORD dwUnk) RX;
 	virtual Move IsCellOccupied(CellClass *pDestCell, int facing, int level, CellClass* pSourceCell, bool alt) const RT(Move);
-	virtual DWORD vt_entry_1B0(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4, DWORD dwUnk5) R0;
+	virtual DWORD vt_entry_1B0(CellClass *pCell, int facing, int *level, bool *containsBridge, CellClass* pSourceCell) R0;
 	virtual void SetLocation(const CoordStruct& crd) RX;
 
 // these two work through the object's Location
-	virtual CellStruct* GetMapCoords(CellStruct* pUCell) const R0;
-	virtual CellClass* GetCell() const R0;
+	//Ares WC modified
+	virtual CellStruct* GetMapCoords(CellStruct* pUCell) const //R0;
+	{
+		pUCell->X = this->Location.X / 256;
+		pUCell->Y = this->Location.Y / 256;
+		return pUCell;
+	}
+
+	//virtual CellClass* GetCell() const R0;
+	virtual CellClass* GetCell() const//Ares WC changed
+		{ return MapClass::Instance->GetCellAt(this->Location); }
 
 // these two call ::GetCoords_() instead
 	virtual CellStruct* GetMapCoordsAgain(CellStruct* pUCell) const R0;
@@ -227,10 +237,25 @@ public:
 		{ JMP_THIS(0x70D4A0); }
 
 	void ReplaceTag(TagClass* pTag)
-		{ JMP_THIS(0x5F5B4C); }
+		{ JMP_THIS(0x5F5B50/*5F5B4C*/); }
 
 	int GetCellLevel() const
 		{ JMP_THIS(0x5F5F00); }
+
+	DirStruct* GetDirectionOnTarget(DirStruct* ret, AbstractClass *pTarget) const
+		{ JMP_THIS(0x5F3DB0); }
+
+	DirStruct GetDirectionOnTarget(AbstractClass *pTarget) const {
+		DirStruct ret;
+		this->GetDirectionOnTarget(&ret, pTarget);
+		return ret;
+	}
+
+	CoordStruct GetDockCoords(TechnoClass* docker)  const{
+		CoordStruct ret;
+		this->GetDockCoords(&ret, docker);
+		return ret;
+	}
 
 	CellStruct GetMapCoords() const {
 		CellStruct ret;
@@ -245,9 +270,16 @@ public:
 	}
 
 	CoordStruct GetFLH(int idxWeapon, const CoordStruct& base) const {
-		CoordStruct ret;
-		this->GetFLH(&ret, 0, base);
+		CoordStruct ret;		
+		this->GetFLH(&ret, idxWeapon, base);//this->GetFLH(&ret, 0, base);
 		return ret;
+	}
+
+	//Ares WC added:
+	// smooth operator
+	const char* get_ID() const {
+		auto const pType = this->GetType();
+		return pType ? pType->get_ID() : nullptr;
 	}
 
 	//Constructor

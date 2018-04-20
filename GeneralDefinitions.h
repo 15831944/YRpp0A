@@ -416,6 +416,50 @@ enum class TriggerAction : unsigned int {
 	JumpCameraHome = 0x91
 };
 
+//Ares WC added:
+enum class ScriptAction : int {
+	None = -1,
+	AttackObjects = 0,
+	AttackWaypoint = 1,
+	GoBerzerk = 2,
+	MoveToWaypoint = 3,
+	GuardForSomeTime = 5,
+	JumpToLine = 6,
+	UnloadPassengers = 8,
+	Deploy = 9,
+	FollowNearestFriendies = 10,
+	DoThis = 11,
+	SetGlobal = 12,
+	TransporterLoad = 14,
+	PatrolToWaypoint = 16,
+	ChangeToScriptType = 17,
+	ChangeToTaskForce = 18,
+	Panic = 19,
+	Scatter = 21,
+	AutoProduce = 29,
+	SellAllAndHunt = 30,
+	HideMap = 35,
+	RevealMap = 36,
+	ChangeDirectionTo = 42,
+	LoadTillFull = 43,
+	AttackBuildingID = 46,
+	MoveToBuildingID = 47,
+	Success = 49,
+	PlayAnim = 51,
+	GatherAtEnemyBase = 53,
+	GatherAtBaseCell = 54,
+	IronCurtainMe = 55,
+	ChronoShiftTo = 57,
+	MoveToFriendlyBldID = 58,
+	ActionOnWaypoint = 59,
+	MoveToGrinder = 60,
+	MoveIntoTankBunker = 61,
+	MoveIntoBioReactor = 62,
+	MoveIntoBattleBunker = 63,
+	GarrisionCivilianBuilding = 64
+};
+//end add
+
 enum class AIMode : int {
 	General = 0,
 	LowOnCash = 1, // if HouseClass::AvailableMoney < 25 ! stupidly low value
@@ -545,13 +589,15 @@ enum class Category : int {
 
 typedef int eCellFlags;
 
+#define cf_Fog					0x02
 #define	cf_IsWaypoint		0x04
 #define	cf_Explored			0x08 //this means no shroud
 #define	cf_FlagPresent		0x10
 #define cf_Bridge			0x100
+#define cf_TileShadowOnMe 0x10000
 #define	cf_VeinsPresent		0x20000
 #define	cf_EMPPresent		0x80000
-#define	cf_Fogged		0x400000
+#define	cf_Fogged		0x400000//seems to related with FoggedObject vector
 
 
 typedef int eCellFlags_12C;

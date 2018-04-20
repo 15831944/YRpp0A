@@ -37,6 +37,13 @@ public:
 	void DamageArea(const CoordStruct& location) const
 		{ JMP_THIS(0x75F330); }
 
+	//Ares WC added:
+	// helper 
+	WaveClass* Construct(
+		const CoordStruct& From, const CoordStruct& To, TechnoClass *pOwner,
+		WaveType mode, AbstractClass *pTarget)
+		{ JMP_THIS(0x75E950); }
+
 	//Constructor
 	WaveClass(
 		const CoordStruct& From, const CoordStruct& To, TechnoClass *Owner,

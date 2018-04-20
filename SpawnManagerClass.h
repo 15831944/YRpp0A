@@ -24,7 +24,9 @@ enum class SpawnNodeStatus : unsigned int {
 
 struct SpawnNode
 {
-	TechnoClass* Unit;
+	//-Zero Fanker : See in the UnlinkPointer function
+	//the field 6CA only owned by AircraftClass
+	AircraftClass* Spawnee;//TechnoClass* Unit; -the spawned object , such as v3 rocket , hornet
 	SpawnNodeStatus Status;
 	TimerStruct SpawnTimer;
 	BOOL IsSpawnMissile;
@@ -76,6 +78,9 @@ public:
 
 	void UnlinkPointer(AbstractClass* pAbstract)
 		{ JMP_THIS(0x6B7C60); }
+
+	void SpawnManger_DTOR()
+		{ JMP_THIS(0x6B7010); }
 
 	//Constructor
 	SpawnManagerClass(

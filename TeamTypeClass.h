@@ -9,7 +9,7 @@
 #include <TaskForceClass.h>
 
 //forward declarations
-class FootClass;
+//class FootClass;
 class TagClass;
 class TeamClass;
 class TechnoTypeClass;
@@ -39,6 +39,25 @@ public:
 	static bool LoadFromINIList(CCINIClass *pINI, bool IsGlobal)
 		{ PUSH_VAR8(IsGlobal); SET_REG32(ECX, pINI); CALL(0x6F19B0); }
 
+	//Ares WC added:
+	//what's the difference between ::Find ? 
+	//see ID match check
+	static TeamTypeClass* FindEx(const char *Title)
+	{
+		auto result = -1;
+		auto const& Array = *TeamTypeClass::Array;
+		for (auto idx = 0; idx < Array.Count; ++idx) {
+			if (!_strcmpi(Array[idx]->ID, Title)
+			|| !_strcmpi(Array[idx]->Name, Title)) {
+				result = idx;
+				break;
+			}
+		}
+
+		return (result < 0) ? nullptr : Array.GetItem(result);
+	}
+	//end
+
 	TeamClass * CreateTeam(HouseClass *pHouse)
 		{ JMP_THIS(0x6F09C0); }
 
@@ -54,8 +73,8 @@ public:
 	CellStruct* GetTransportWaypoint(CellStruct *buffer) const
 		{ JMP_THIS(0x6F18E0); }
 
-	bool CanRecruitUnit(FootClass* pUnit, HouseClass* pOwner) const
-		{ JMP_THIS(0x6F1320); }
+	/*bool CanRecruitUnit(FootClass* pUnit, HouseClass* pOwner) const
+		{ JMP_THIS(0x6F1320); }*///this is absolutely wrong
 
 	void FlashAllInstances(int Duration)
 		{ JMP_THIS(0x6F1F30); }
@@ -121,9 +140,9 @@ public:
 	ScriptTypeClass*  ScriptType;
 	TaskForceClass*   TaskForce;
 	int      IsGlobal;
-	int      field_EC;
-	bool     field_F0;
-	bool     field_F1;
+	MovementZone      unknown_MovementZone;//field_EC;//default to be MovementZone::Fly(9)
+	bool     field_F0;//default to be 1
+	bool     field_F1;//default to be 0
 	bool     AvoidThreats;
 	bool     IonImmune;
 	bool     TransportsReturnOnUnload;

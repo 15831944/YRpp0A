@@ -91,6 +91,20 @@ public:
 		}
 		return -1;
 	}
+	/*
+	static TechnoTypeClass *FindOrAllocate(const char* pID)\
+	{\
+		if (!_strcmpi(pID, "<none>") || !_strcmpi(pID, "none")) {
+			\
+				return nullptr; \
+		}\
+			if (auto pRet = Find(pID)) {
+				\
+					return pRet; \
+			}\
+				return GameCreate<TechnoTypeClass>(pID); \
+	}
+	*/
 
 	static auto const MaxWeapons = 18;
 
@@ -119,6 +133,25 @@ public:
 	{
 		return this->TurretCount > 0;
 	}
+
+	//Ares WC added
+	void SetTurretNumberByWeapon(int turretIdx, int weaponIdx)
+	{
+		this->TurretIndexes[weaponIdx] = turretIdx;
+	}
+	//0x717890
+
+	int GetTurretNumberByWeapon(int weaponIdx) const
+	{
+		return this->TurretIndexes[weaponIdx];
+	}//0x7178B0
+
+	//helper :
+	/*auto GetExtData() const
+	{
+		return TechnoTypeExt::ExtMap.Find(this);
+	}*/
+	//end
 
 	CoordStruct* GetParticleSysOffset(CoordStruct* pBuffer) const
 		{ JMP_THIS(0x7178C0); }
@@ -302,7 +335,7 @@ public:
 	TypeList<int> PrerequisiteOverride;
 	int             ThreatPosed;
 	int             Points;
-	int             Speed;
+	int             Speed;// ini value * 256 / 100 , see how it is read in this->LoadFromINI - Zero Fanker
 	SpeedType       SpeedType;
 	int             InitialAmmo;
 	int             Ammo;
@@ -371,7 +404,7 @@ public:
 	int             TurretCount;
 	int             WeaponCount;
 	bool            IsChargeTurret;
-	int             TurretWeapon[0x21];
+	int             TurretIndexes[0x21];
 	WeaponStruct	Weapon[MaxWeapons];
 	bool            ClearAllWeapons;
 	WeaponStruct	EliteWeapon[MaxWeapons];

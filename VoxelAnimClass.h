@@ -38,7 +38,7 @@ public:
 
 	//Constructor
 	VoxelAnimClass(
-		VoxelAnimTypeClass* pVoxelAnimType, CoordStruct* pLocation,
+		VoxelAnimTypeClass* pVoxelAnimType, CoordStruct& pLocation,
 		HouseClass* pOwnerHouse) : VoxelAnimClass(noinit_t())
 	{ JMP_THIS(0x7493B0); }
 

@@ -47,3 +47,13 @@ virtual void alla(double malla) RX;
 #define NOVTABLE __declspec(novtable)
 
 struct noinit_t final {};
+
+template<typename T, intptr_t addr>
+struct reference {
+	inline operator T() const { return reinterpret_cast<T>(addr); }
+	inline T operator->() const { return operator T(); }
+};
+
+#define DeclareConst(cls, name, adr) \
+	 static constexpr cls name = \
+		reinterpret_cast<cls>(adr);

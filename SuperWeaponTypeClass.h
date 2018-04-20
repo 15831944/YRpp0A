@@ -35,7 +35,7 @@ public:
 	virtual int Size() const R0;
 
 	//SuperWeaponTypeClass
-	virtual Action MouseOverObject(CellStruct const& cell, ObjectClass* pObjBelowMouse) const RT(::Action);
+	virtual Action GetActionOnObject(CellStruct const& cell, ObjectClass* pObjBelowMouse) const RT(::Action);
 
 	// non-virtual
 	static SuperWeaponTypeClass * __fastcall FindFirstOfAction(Action Action)

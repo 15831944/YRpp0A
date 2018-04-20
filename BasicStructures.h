@@ -81,30 +81,45 @@ struct RandomStruct
 };
 
 //3D Matrix
-
+//Ares WC changed
 struct Matrix3DStruct
 {
-	float Data[12];
-};
-
-//Ares WC added
-/**
-3x4的矩阵，左3x3为转换矩阵，由3*1是转换后的平移向量
-*/
-struct TransformMatrix{
 public:
 	using TransformVector = Vector3D<float>;
-	float Matrix[12];
-	TransformMatrix* __fastcall Transpose(TransformMatrix *data)
+	float Data[12];
+
+	const Matrix3DStruct* const MatrixArray = reinterpret_cast<Matrix3DStruct*>(0xB45188);
+	/**
+	3x4的矩阵，左3x3为转换矩阵，由3*1是转换后的平移向量
+	*/
+	Matrix3DStruct* Init()
+		{ JMP_THIS(0x754BE0); }
+	Matrix3DStruct* __fastcall Multiple(Matrix3DStruct *matrix1, Matrix3DStruct *matrix2)
+		{ JMP_THIS(0x5AF980); }
+	Matrix3DStruct* __fastcall Transpose(Matrix3DStruct *data)
 		{ JMP_THIS(0x5AFC20); }
+	void Offset(float offsetValue)
+		{ JMP_THIS(0x5AE980); }
 	TransformVector *Scale(TransformVector *out, TransformVector *in)
 		{ JMP_THIS(0x5AF4D0); }
 	//make the matrix coords multiple with the matrix
-	void Mul(TransformVector factor)
+	void MultipleFactor(TransformVector factor)
 		{ JMP_THIS(0x5AE890); }
-	//rotate the matrix by a given angle , it seems only changes within X,Y surface
-	void Rotate(float angle)
+	//get a certain matrix from matrix array
+	Matrix3DStruct* GetMatrixBySlopeIndex(int slopeIndex)
+	{
+		memcpy(this, &MatrixArray[slopeIndex], 0x30u);
+		return this;
+	}
+		//{ JMP_THIS(0x7559B0); }
+	//rotate the matrix by a given angle , different axises needs separate matrix
+	void RotateAroundXAxis(float angle)
+		{ JMP_THIS(0x5AEF60); }
+	void RotateAroundYAxis(float angle)
+		{ JMP_THIS(0x5AF080); }
+	void RotateAroundZAxis(float angle)
 		{ JMP_THIS(0x5AF1A0); }
+
 	void Identity()
 		{ JMP_THIS(0x5AE860); }
 };
@@ -113,6 +128,14 @@ public:
 struct RectangleStruct
 {
 	int X, Y, Width, Height;
+
+	RectangleStruct& operator+= (RectangleStruct&rhs) {
+		this->X += rhs.X;
+		this->Y += rhs.Y;
+		this->Width += rhs.Width;
+		this->Height += rhs.Height;
+		return *this;
+	}
 };
 
 struct LTRBStruct

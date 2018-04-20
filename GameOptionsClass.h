@@ -8,6 +8,9 @@ public:
 	int GetAnimSpeed(int rate)
 		{ JMP_THIS(0x5FB2E0); }
 
+	void LoadFromINI()
+		{ JMP_THIS(0x5FA620); }
+
 	int GameSpeed;
 	int Difficulty;
 	int CampDifficulty;

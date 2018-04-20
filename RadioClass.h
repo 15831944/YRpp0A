@@ -33,8 +33,8 @@ public:
 	}
 
 	// whether any link is pLink
-	bool ContainsLink(TechnoClass const* pLink) const
-		{ JMP_THIS(0x65AD50); }
+	bool ContainsLink(TechnoClass *const pLink) const
+		{ return this->RadioLinks.Contains(pLink); }//{ JMP_THIS(0x65AD50); }
 
 	// note: null pointers will always return -1
 	int FindLinkIndex(TechnoClass const* pLink) const

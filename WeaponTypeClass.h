@@ -39,6 +39,9 @@ public:
 	void CalculateSpeed()
 		{ JMP_THIS(0x7729F0); }
 
+	int GetArcingSpeed(int distance)
+		{ JMP_THIS(0x773070); }
+
 	//Constructor
 	WeaponTypeClass(const char* pID = nullptr)
 		: WeaponTypeClass(noinit_t())

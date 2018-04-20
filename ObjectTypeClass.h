@@ -29,13 +29,13 @@ public:
 	virtual DWORD GetOwners() const R0;
 	virtual int GetPipMax() const R0;
 	virtual void vt_entry_78(DWORD dwUnk) const RX;
-	virtual void vt_entry_7C(DWORD dwUnk) RX;
+	virtual CoordStruct* GetOutlineLeptonOffset(CoordStruct& ret) const R0;/*void vt_entry_7C(DWORD dwUnk) RX;*/ //returns coords as 256,256,2 * LevelHeight(104) , building checks foundation and height
 	virtual bool SpawnAtMapCoords(CellStruct* pMapCoords, HouseClass* pOwner) = 0;
 	virtual int GetActualCost(HouseClass* pHouse) const R0;
 	virtual int GetBuildSpeed() const R0;
 	virtual ObjectClass* CreateObject(HouseClass* pOwner) = 0;
 	virtual CellStruct * GetFoundationData(bool IncludeBib) const R0;
-	virtual BuildingClass* FindFactory(bool allowOccupied, bool requirePower, bool requireCanBuild, HouseClass const* pHouse) const R0;
+	virtual BuildingClass* FindFactoryBuilding(bool allowOccupied, bool requirePower, bool requireCanBuild, HouseClass const* pHouse) const R0;
 	virtual SHPStruct* GetCameo() const R0;
 	virtual SHPStruct* GetImage() const R0;
 
@@ -45,6 +45,17 @@ public:
 	static TechnoTypeClass * __fastcall GetTechnoType(AbstractType abstractID, int idx)
 		{ JMP_STD(0x48DCD0); }
 
+	//Ares WC added:
+	bool LoadMultipleTurretsImage(char* const pSection,int TurretIdx) const
+		{ JMP_THIS(0x5F7A90); }
+
+	//helper
+	CoordStruct GetOutlineLeptonOffset()
+	{
+		CoordStruct ret;
+		this->GetOutlineLeptonOffset(ret);
+		return ret;
+	}
 
 	//Constructor
 	ObjectTypeClass(const char* pID) noexcept

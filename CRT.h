@@ -67,6 +67,9 @@ public:
 		static char *__cdecl strstr(const char *Str, const char *SubStr)
 			{ JMP_STD(0x7CA4B0); }
 
+		static char * __cdecl strtok(const char* Str, char const* Delim) 
+			{ JMP_STD(0x7C9CC2); }//Ares WC added
+
 		static int __cdecl sscanf(const char *, const char *, ...)
 			{ JMP_STD(0x7CA530); }
 
@@ -79,6 +82,14 @@ public:
 		static int __cdecl vsprintf(char *, const char *, va_list)
 			{ JMP_STD(0x7CB7BA); }
 
+		static int __cdecl atoi(const char *Str)
+			{ return atol(Str); }//Ares WC added
+
+		static __int32 __cdecl atol(const char *Str)
+			{ JMP_STD(0x7C9B72); }//Ares WC added
+
+		static char *__cdecl itoa(int Value, char *Dest, int Radix)
+			{ JMP_STD(0x7D468C); }//Ares WC added
 
 		// misc
 		static void *__cdecl memcpy(void *Dst, const void *Src, size_t Size)
@@ -90,6 +101,9 @@ public:
 		static void *__cdecl bsearch(const void *, const void *, size_t, size_t, int (__cdecl *)(const void *, const void *))
 			{ JMP_STD(0x7C8E25); }
 
+		//delete empty content , like blank , or something
+		static char *__fastcall reformat(char *str)
+			{ JMP_STD(0x727CF0); }
 
 		// files
 		static FILE *__cdecl fopen(const char *, const char *)

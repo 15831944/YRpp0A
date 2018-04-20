@@ -18,6 +18,7 @@ NOTE:
 //forward declarations
 class HouseClass;
 class CCINIClass;
+struct NodeNameType;//Ares WC added
 
 // these things are fugly, feel free to rewrite if possible
 
@@ -57,6 +58,12 @@ class MPGameModeClass
 public:
 	//global arrays
 	static DynamicVectorClass<MPGameModeClass*>* GameModes;
+
+	//Ares WC added:
+	static DynamicVectorClass<NodeNameType*>* const HumanPlayersData;
+
+	static MPGameModeClass* const Instance;
+	//end
 
 	/*
 	static UNINIT_FUNC(0x5D7FD0);
@@ -217,7 +224,7 @@ public:
 		DynamicVectorClass<CellStruct> *vecCoords, byte *housesSatisfied)
 		{ JMP_THIS(0x5D6890); }
 
-	virtual bool SpawnBaseUnits(HouseClass *House, DWORD dwUnused)
+	virtual bool SpawnBaseUnit(HouseClass *House, const int* pMoney)
 		{ JMP_THIS(0x5D7030); }
 
 	virtual bool GenerateStartingUnits(HouseClass *House, int &AmountToSpend)
@@ -379,7 +386,7 @@ class MPUnholyAllianceClass : public MPGameModeClass
 	virtual bool vt_entry_18()
 		{ JMP_THIS(0x5CB430); }
 
-	virtual bool SpawnBaseUnits(HouseClass *House, DWORD dwUnused)
+	virtual bool SpawnBaseUnit(HouseClass *House, const int* pMoney)
 		{ JMP_THIS(0x5CB440); }
 
 	/*
@@ -427,8 +434,8 @@ class MPSiegeClass : public MPGameModeClass
 	virtual void CreateMPTeams(DynamicVectorClass<MPTeam> *vecTeams)
 		{ JMP_THIS(0x5CA9B0); }
 
-	virtual bool SpawnBaseUnits(HouseClass *House, DWORD dwUnused)
-		{ JMP_THIS(0x5CAA50); }
+	virtual bool SpawnBaseUnit(HouseClass *House, const int* pMoney)
+		{ JMP_THIS(0x5CAAC0); }
 
 	/*
 	static UNINIT_FUNC(0x5D8030);
@@ -445,4 +452,45 @@ protected:
 		: MPGameModeClass(noinit_t())
 	{ }
 	//FACTORY(0x7EEEA4);
+};
+
+class MPCooperative : public MPGameModeClass
+{
+	class CoopCampaignClass
+	{
+		CoopCampaignClass()
+		{ JMP_THIS(0x49B610); }
+
+		char field__0;
+		char gap_1[19];
+		int House1;
+		int Color1;
+		char field_bool_1C;
+		PROTECTED_PROPERTY(char, gap_1D[19])
+		int House2;
+		int Color2;
+		int CurrentMap;
+		int field_3C;
+		int field_40;
+		int CampaignType;
+		int Kills1;
+		int Kills2;
+		int Built1;
+		int Built2;
+		int Lost1;
+		int Lost2;
+		int Score1;
+		int Score2;
+		int Time;
+		char field_bool_6C;
+		PROTECTED_PROPERTY(char, gap_6D[1])
+		int field_6E;
+	};
+
+
+	//Constructor
+	MPCooperative(wchar_t **CSFTitle, wchar_t **CSFTooltip, char **INIFileName, char **mapfilter, bool AIAllowed, int MPModeIndex)
+		: MPGameModeClass(noinit_t())
+	{ JMP_THIS(0x5C1470); }
+	
 };

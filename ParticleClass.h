@@ -33,7 +33,11 @@ public:
 	virtual int Size() const R0;
 
 	//ParticleClass
-	virtual int vt_entry_1E8() R0;
+	//it returns an index value, to decide which frame to draw for the particle -Zero Fanker
+	virtual int ProcessState() R0; //vt_entry_1E8() R0;
+
+	//int ProcessState()
+	//{ JMP_THIS(0x62D830); }
 
 	//Constructor
 	ParticleClass(
@@ -60,9 +64,10 @@ public:
 	DWORD  unknown_B4;
 	DWORD  unknown_B8;
 	DWORD  unknown_BC;
-	DWORD  unknown_C0;
-	DWORD  unknown_C4;
-	DWORD  unknown_C8;
+	//DWORD  unknown_C0;
+	//DWORD  unknown_C4;
+	//DWORD  unknown_C8;
+	CoordStruct Location;//changed by Zero Fanker
 	DWORD  unknown_CC;
 	double unknown_double_D0;
 	DWORD  unknown_D8;
@@ -79,9 +84,9 @@ public:
 	WORD   RemainingDC;
 	BYTE   StateAIAdvance;
 	BYTE   unknown_12D;
-	BYTE   StartStateAI;
+	BYTE   StateAI; //StartStateAI; changed name for its real usage -Zero Fanker
 	BYTE   Translucency;
 	BYTE   unknown_130;
-	BYTE   unknown_131;
+	bool   TimeToDie;
 	PROTECTED_PROPERTY(DWORD,        unused_134); //??
 };

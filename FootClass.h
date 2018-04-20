@@ -12,6 +12,57 @@
 class LocomotionClass;
 class TeamClass;
 
+//Ares WC added
+class NOVTABLE AirSpaceClass
+{
+public:
+	//Static
+	static AirSpaceClass* const Instance;
+
+	void Add(FootClass* const pNewMember)
+		{ JMP_THIS(0x4134A0); }
+
+	void Remove(FootClass* const pMember)
+		{ JMP_THIS(0x4135D0); }
+
+	void GetAirTargetInRange(CellClass* Centre,int Range)
+		{ JMP_THIS(0x412B40); }
+
+	FootClass* GetNextAirTarget()
+		{ JMP_THIS(0x4137A0); }
+};
+
+//helper
+struct NextAirTarget
+{
+	AirSpaceClass* Instance;
+	FootClass* Current;
+
+	NextAirTarget(AirSpaceClass* instance, CellClass* centre, int range)
+	{
+		this->Instance = instance;
+		instance->GetAirTargetInRange(centre, range);
+		this->Current = this->Instance->GetNextAirTarget();
+	}
+
+	NextAirTarget(CellClass* centre, int range)
+	{
+		NextAirTarget(AirSpaceClass::Instance, centre, range);
+	}
+
+	explicit operator bool() const {
+		return Current != nullptr;
+	}
+
+	FootClass* operator ++()
+	{
+		Current = this->Instance->GetNextAirTarget();
+		return Current;
+	}
+};
+
+//end
+
 class NOVTABLE FootClass : public TechnoClass
 {
 public:
@@ -28,18 +79,18 @@ public:
 	//MissionClass
 	//TechnoClass
 	virtual void Destroyed(ObjectClass *Killer) RX;
-	virtual void vt_entry_490(DWORD dwUnk, DWORD dwUnk2) RX;
+	virtual bool TryPutAndRemoveObstacles(CoordStruct* location, unsigned dFaceDir) RX;//vt_entry_490
 
 	//FootClass
 	virtual void ReceiveGunner(FootClass* Gunner) RX;
 	virtual void RemoveGunner(FootClass* Gunner) RX;
 	virtual bool IsLeavingMap() const R0;
 	virtual bool vt_entry_4E0() const R0;
-	virtual bool vt_entry_4E4() const R0;
-	virtual void vt_entry_4E8(CellStruct* pCell) RX;
-	virtual void vt_entry_4EC(CellStruct* pCell) RX;
-	virtual CoordStruct* vt_entry_4F0(CoordStruct* pCrd) R0;
-	virtual void vt_entry_4F4() RX;
+	virtual bool CanDeployNow() const R0;//vt_entry_4E4() const R0;
+	virtual void SensorArrayActivate(CellStruct Cellcrd = CellStruct::Empty) RX;
+	virtual void SensorArrayDeactivate(CellStruct pCellcrd = CellStruct::Empty) RX;
+	virtual CoordStruct* GetCoords_Position0(CoordStruct* pCrd) R0; //CoordStruct* vt_entry_4F0(CoordStruct* pCrd) R0;
+	virtual void AbandonHunt() RX;//vt_entry_4F4() RX;
 	virtual bool vt_entry_4F8() R0;
 	virtual bool MoveTo(CoordStruct* pCrd) R0;
 	virtual bool StopMoving() R0;
@@ -48,8 +99,8 @@ public:
 	virtual void Draw_A_SHP(
 		SHPStruct *SHP, int idxFacing, Point2D * Coords, RectangleStruct *Rectangle,
 		DWORD dwUnk5, DWORD dwUnk6, DWORD dwUnk7, ZGradient ZGradient,
-		DWORD dwUnk9, int extraLight, DWORD dwUnk11, DWORD dwUnk12,
-		DWORD dwUnk13, DWORD dwUnk14, DWORD dwUnk15, DWORD dwUnk16) RX;
+		DWORD dwUnk9, int extraLight, DWORD TintAdded, DWORD dwUnk12,
+		DWORD dwUnk13, int ZS_X, int ZS_Y, DWORD dwUnk16) RX;
 
 	virtual void Draw_A_VXL(
 		VoxelStruct *VXL, int HVAFrameIndex, int Flags, SomeVoxelCache *Cache, RectangleStruct *Rectangle,
@@ -60,17 +111,17 @@ public:
 	virtual void UnPanic() RX; //never
 	virtual void PlayIdleAnim(int nIdleAnimNumber) RX;
 	virtual DWORD vt_entry_524() R0;
-	virtual DWORD vt_entry_528 ( DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3 ) const R0;
-	virtual DWORD vt_entry_52C(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4) const R0;
-	virtual DWORD vt_entry_530(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3) const R0;
-	virtual void vt_entry_534(DWORD dwUnk, DWORD dwUnk2) RX;
+	virtual BuildingClass* FindNearestBuildingOfTypes(TypeList<BuildingTypeClass*> * DockList, bool includeAllies, bool includeBusy) const R0;//vt_entry_528
+	virtual BuildingClass* FindNearestBuildingOfType(BuildingTypeClass *pDockerType, DWORD dwUnk, DWORD dwUnk2, int* minDistance) const R0;//virtual DWORD vt_entry_52C(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4) const R0;
+	virtual DWORD FindNearestOfBuildingsOfTypeNoDist(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3) const R0;
+	virtual void CrushCell(CoordStruct* tgtcrd, DWORD dwUnk2) RX;
 	virtual int GetCurrentSpeed() const R0;
-	virtual DWORD vt_entry_53C(DWORD dwUnk) R0;
+	virtual AbstractClass* TrackTarget(bool Forced = false) const/*vt_entry_53C(DWORD dwUnk)*/ R0;
 	virtual void vt_entry_540(DWORD dwUnk) RX;
 	virtual void SetSpeedPercentage(double percentage) RX;
 	virtual void vt_entry_548() RX;
 	virtual void vt_entry_54C() RX;
-	virtual bool vt_entry_550(DWORD dwUnk) R0;
+	virtual bool CanCurrentlyDockOn(AbstractClass* const pDocker)/*vt_entry_550(DWORD dwUnk)*/ R0;
 
 	bool CanBeRecruited(HouseClass *ByWhom) const
 		{ JMP_THIS(0x4DA230); }
@@ -88,11 +139,6 @@ public:
 
 	void Jumpjet_OccupyCell(CellStruct Cell)
 		{ JMP_THIS(0x4E00B0); }
-
-	// changes locomotor to the given one, Magnetron style
-	// mind that this locks up the source too, Magnetron style
-	void FootClass_ImbueLocomotor(FootClass *target, CLSID clsid)
-		{ JMP_THIS(0x710000); }
 
 	// var $this = this; $.each($this.Passengers, function(ix, p) { p.Location = $this.Location; });
 	void UpdatePassengerCoords()
@@ -151,15 +197,15 @@ public:
 	DWORD           unknown_52C;	//unused?
 	DWORD           unknown_530;
 	DWORD           unknown_534;
-	DWORD           unknown_538;
-	bool            unknown_bool_53C;
-	DWORD           unknown_540;
+	int				  WalkedFramesSoFar;// unknown_538;
+	bool            PlayingMovingSound;
+	int              MovingSoundDelay;//DWORD           unknown_540;
 
 	AudioController Audio7;
 
 	CellStruct      CurrentMapCoords;
 	CellStruct      LastMapCoords; // ::UpdatePosition uses this to remove threat from last occupied cell, etc
-	CellStruct      LastJumpjetMapCoords; // which cell was I occupying previously? only for jumpjets
+	CellStruct      LastFlightMapCoords; // which cell was I occupying previously? only for jumpjets // Nope ! Aircraft also uses this one ! -Zero Fanker
 	CellStruct      CurrentJumpjetMapCoords; // which cell am I occupying? only for jumpjets
 	CoordStruct     unknown_coords_568;
 	PROTECTED_PROPERTY(DWORD,   unused_574);
@@ -172,7 +218,7 @@ public:
 	DynamicVectorClass<AbstractClass*> unknown_abstract_array_5AC;
 	int             unknown_int_5C4;
 	DWORD           unknown_5C8;
-	DWORD           unknown_5CC;
+	AbstractClass* CandidateTarget;//DWORD           unknown_5CC;
 	BYTE            unknown_5D0;	//unused?
 	bool            unknown_bool_5D1;
 	TeamClass*      Team;
@@ -190,24 +236,24 @@ public:
 	bool              unknown_bool_685;
 	signed char       WaypointIndex; // which waypoint in my planning path am I following?
 	bool              unknown_bool_687;
-	bool              unknown_bool_688;
-	bool              IsTeamLeader;
+	bool              TargetAcquired;//this one used when checking auto targeting , set it to true will stop check// unknown_bool_688;
+	bool              IsReadyInStray;
 	bool              ShouldScanForTarget;
 	bool              unknown_bool_68B;
 	bool              unknown_bool_68C;
 	bool              unknown_bool_68D;
-	bool              unknown_bool_68E;
+	bool              ShouldOverpoweringTarget;// unknown_bool_68E;
 	bool              ShouldEnterAbsorber; // orders the unit to enter the closest bio reactor
 	bool              ShouldEnterOccupiable; // orders the unit to enter the closest battle bunker
 	bool              ShouldGarrisonStructure; // orders the unit to enter the closest neutral building
 	FootClass*        ParasiteEatingMe; // the tdrone/squid that's eating me
-	DWORD             unknown_698;
+	int			           ParasiteFireBlock;//unknown_698;
 	ParasiteClass*    ParasiteImUsing;	// my parasitic half, nonzero for, eg, terror drone or squiddy
 	TimerStruct       ParalysisTimer; // for squid victims
 	bool              unknown_bool_6AC;
 	bool              IsAttackedByLocomotor; // the unit's locomotor is jammed by a magnetron
 	bool              IsLetGoByLocomotor; // a magnetron attacked this unit and let it go. falling, landing, or sitting on the ground
-	bool              unknown_bool_6AF;
+	bool              FacingChanging;//Zero Fanker - it seems desinged for spinning turret
 	bool              unknown_bool_6B0;
 	bool              unknown_bool_6B1;
 	bool              unknown_bool_6B2;

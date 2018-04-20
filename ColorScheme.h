@@ -9,6 +9,11 @@
 
 class LightConvertClass;
 
+struct HashObject
+{
+
+};
+
 class ColorScheme
 {
 public:

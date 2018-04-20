@@ -43,7 +43,10 @@ class NOVTABLE AbstractClass : public IPersistStream, public IRTTITypeInfo, publ
 public:
 	static const AbstractType AbsID = AbstractType::Abstract;
 
+	static DynamicVectorClass<AbstractClass *>* const Array;//Ares WC added - dummy
 	static DynamicVectorClass<AbstractClass *>* const Array0;
+	//DeclareConst(DynamicVectorClass<AbstractClass *>*, Array0, 0xB0F720u);
+	//static constexpr reference<DynamicVectorClass<AbstractClass *>*, 0xB0F720u> const Array0{};
 
 	//static
 	const char* GetClassName() const
@@ -56,8 +59,8 @@ public:
 		const size_t TypeCount = 74;
 		const auto Types = reinterpret_cast<NamedValue(*)[TypeCount]>(0x816EE0);
 
-		for(const auto& Type : *Types) {
-			if(static_cast<AbstractType>(Type.Value) == abs) {
+		for (const auto& Type : *Types) {
+			if (static_cast<AbstractType>(Type.Value) == abs) {
 				return Type.Name;
 			}
 		}
@@ -104,8 +107,8 @@ public:
 	virtual HouseClass* GetOwningHouse() const R0;
 	virtual int GetArrayIndex() const R0;
 	virtual bool IsDead() const R0;
-	virtual CoordStruct* GetCoords(CoordStruct* pCrd) const R0;
-	virtual CoordStruct* GetDestination(CoordStruct* pCrd, TechnoClass* pDocker = nullptr) const R0; // where this is moving, or a building's dock for a techno. iow, a rendez-vous point
+	virtual CoordStruct* GetCoords(CoordStruct* pCrd) const R0;//usually returns the copy value of this->Location
+	virtual CoordStruct* GetDestinationCoord(CoordStruct* pCrd, TechnoClass* pDocker = nullptr) const R0; // where this is moving, or a building's dock for a techno. iow, a rendez-vous point
 	virtual bool IsOnFloor() const R0;
 	virtual bool IsInAir() const R0;
 	virtual CoordStruct* GetCoords__(CoordStruct* pCrd) const R0;
@@ -113,7 +116,9 @@ public:
 
 	//non-virtual
 	static void __fastcall AnnounceExpiredPointer(AbstractClass* pAbstract, bool removed = true)
-		{ JMP_THIS(0x7258D0); }
+	{
+		JMP_THIS(0x7258D0);
+	}
 
 	void AnnounceExpiredPointer(bool removed = true) {
 		AnnounceExpiredPointer(this, removed);
@@ -125,9 +130,9 @@ public:
 		return ret;
 	}
 
-	CoordStruct GetDestination(TechnoClass* pDocker = nullptr) const {
+	CoordStruct GetDestinationCoord(TechnoClass* pDocker = nullptr) const {
 		CoordStruct ret;
-		this->GetDestination(&ret, pDocker);
+		this->GetDestinationCoord(&ret, pDocker);
 		return ret;
 	}
 
@@ -136,6 +141,24 @@ public:
 		this->GetCoords__(&ret);
 		return ret;
 	}
+
+	//helper Ares WC added
+	const char* get_ID() const {
+		return nullptr;
+	}
+
+	/*template<typename T>
+	static T* GetExtData(T* base_type)
+	{
+		return Extension<T>::ExtMap.Find(base_type);
+	}
+
+	template<typename T>
+	T* GetExtData() const
+	{
+		return GetExtData(this);
+	}*/
+	//end
 
 	//Operators
 	bool operator < (const AbstractClass &rhs) const {

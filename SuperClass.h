@@ -80,7 +80,13 @@ public:
 		{ JMP_THIS(0x6CC1E0); }
 
 	int GetRechargeTime() const // the time it takes this SW to recharge fully
-		{ JMP_THIS(0x6CC260); }
+	{
+		auto rechargeTime = this->CustomChargeTime;
+		if (rechargeTime == -1) {
+			rechargeTime = this->Type->RechargeTime;
+		}
+		return rechargeTime;
+	}//{ JMP_THIS(0x6CC260); }
 
 	void SetRechargeTime(int time) // makes this SW rechange in this many frames, as opposed to [Type]RechargeTime
 		{ JMP_THIS(0x6CC280); }

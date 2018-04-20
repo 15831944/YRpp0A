@@ -11,7 +11,8 @@ public:
 public:
 	DWORD Random()
 		{ JMP_THIS(0x65C780); }
-
+	// infact , max and min can be swapped , since the function itself can correct
+	// - Zero Fanker
 	int RandomRanged(int nMin, int nMax)
 		{ JMP_THIS(0x65C7E0); }
 

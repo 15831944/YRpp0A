@@ -60,8 +60,8 @@ public:
 
 	virtual void vt_entry_1F4(Mission mission) RX;
 	virtual bool Mission_Revert() R0;
-	virtual bool vt_entry_1FC() const R0;
-	virtual bool vt_entry_200() const R0;
+	virtual bool HasForcedMission/*vt_entry_1FC*/() const R0;
+	virtual bool CanDoNextMission() const R0;// vt_entry_200() const R0;
 
 	virtual int Mission_Sleep() R0;
 	virtual int Mission_Harmless() R0;

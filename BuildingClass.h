@@ -32,18 +32,22 @@ public:
 	virtual int	Size() const R0;
 
 	//ObjectClass
+	virtual BuildingTypeClass* GetType() const override
+		{ return this->Type; }
 	//MissionClass
 	//TechnoClass
+	virtual BuildingTypeClass* GetTechnoType() const override
+		{ return this->Type; }
 	virtual void Destroyed(ObjectClass* Killer) RX;
-	virtual void vt_entry_490(DWORD dwUnk, DWORD dwUnk2) RX;
-
+	virtual bool TryPutAndRemoveObstacles(CoordStruct* location, unsigned dFaceDir) RX;//vt_entry_490
+	
 	//BuildingClass
-	virtual CellStruct* vt_entry_4D4(CellStruct* pCellStruct, DWORD dwUnk, DWORD dwUnk2) const R0;
+	virtual CellStruct* TryGetKickOutCell(CellStruct *pCellOut, FootClass *pUnitKicking, CellStruct CandidateCellCrd) const R0;
 	virtual int vt_entry_4D8(ObjectClass* pObj) const R0;
 	virtual void Place(bool bUnk) RX;
 	virtual void UpdateConstructionOptions() RX;
 	virtual void vt_entry_4E4(DWORD dwUnk, DWORD dwUnk2) RX;
-	virtual CellStruct* vt_entry_4E8(CellStruct* pCellStruct, DWORD dwUnk) const R0;
+	virtual DirStruct* AdjustDirectionByOffset(DirStruct *pDirOut, AbstractClass *pTarget)/*CellStruct* vt_entry_4E8(CellStruct* pCellStruct, DWORD dwUnk) */const R0;
 	virtual void vt_entry_4EC(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4) RX;
 	virtual bool TogglePrimaryFactory() R0;
 	virtual void SensorArrayActivate(CellStruct cell=CellStruct::Empty) RX;
@@ -161,6 +165,10 @@ public:
 	bool IsTraversable() const
 		{ JMP_THIS(0x4525F0); }
 
+	//i guess it returns the next frame to draw of this building - Zero Fanker
+	int GetDrawingFrame() const
+		{ JMP_THIS(0x43EF90); }
+
 	// helpers
 	bool HasSuperWeapon(int index) const {
 		if(this->Type->HasSuperWeapon(index)) {
@@ -191,6 +199,12 @@ public:
 	bool const& GetAnimState(BuildingAnimSlot slot) const {
 		return this->AnimStates[static_cast<int>(slot)];
 	}
+
+	//Ares WC added:
+	void UpdatePowerUpState(FootClass* pAssualter)
+	{
+		this->Overpowerers.AddUnique((InfantryClass*)pAssualter);
+	}//0x452820
 
 	//Constructor
 	BuildingClass(BuildingTypeClass* pType, HouseClass* pOwner) noexcept

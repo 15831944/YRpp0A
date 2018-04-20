@@ -15,6 +15,7 @@
 #include <Helpers/Template.h>
 #include <ProgressTimer.h>
 #include <PlanningTokenClass.h>
+#include <RulesClass.h>//Ares WC added
 
 //forward declarations
 class AirstrikeClass;
@@ -30,6 +31,7 @@ class ObjectTypeClass;
 class ParticleSystemClass;
 class SpawnManagerClass;
 class WaveClass;
+class EBolt;
 
 struct NetworkEvent;
 
@@ -110,7 +112,7 @@ class PassengersClass
 public:
 	int NumPassengers;
 	FootClass* FirstPassenger;
-
+	//remove units from map , and update "pPassenger->NextObject" -Zero Fanker
 	void AddPassenger(FootClass* pPassenger)
 		{ JMP_THIS(0x4733A0); }
 
@@ -176,6 +178,20 @@ public:
 	//Destructor
 	virtual ~TechnoClass() RX;
 
+	//ObjectClass override
+	//WW did the same thing like here , 
+	//see in 0x6F3270 and cry -Zero Fanker
+	virtual TechnoTypeClass* GetTechnoType() const override
+		{ return this->GetType(); }
+	virtual TechnoTypeClass* GetType() const override R0;
+
+	//MissionClass
+	virtual Mission GetCurrentMission() const override 
+	{
+		auto mission = this->CurrentMission;
+		return mission == Mission::None ? this->QueuedMission : mission;
+	}
+
 	//TechnoClass
 	virtual bool IsUnitFactory() const R0;
 	virtual bool IsCloakable() const R0;
@@ -205,10 +221,10 @@ public:
 	virtual int SelectNavalTargeting(AbstractClass *pTarget) const R0;
 	virtual int GetZAdjustment() const R0;
 	virtual ZGradient GetZGradient() const RT(ZGradient);
-	virtual CellStruct* GetSomeCellStruct() const R0;
-	virtual void SetSomeCellStruct(CellStruct* Buffer) RX;
+	virtual CellStruct* GetLastFlightMapCoords(CellStruct& Buffer) const R0;
+	virtual void SetLastFlightMapCoords(CellStruct* Buffer) RX;
 	virtual CellStruct* vt_entry_2FC(CellStruct* Buffer, DWORD dwUnk2, DWORD dwUnk3) const R0;
-	virtual CoordStruct * vt_entry_300(CoordStruct * Buffer, DWORD dwUnk2) const R0;
+	virtual CoordStruct * GetFirePosition(CoordStruct * Buffer, int WeaponIdx)/*vt_entry_300(CoordStruct * Buffer, DWORD dwUnk2)*/ const R0;
 	virtual DWORD vt_entry_304(DWORD dwUnk, DWORD dwUnk2) const R0;
 	virtual DirStruct* GetRealFacing(DirStruct* pBuffer) const R0;
 	virtual InfantryTypeClass* GetCrew() const R0;
@@ -247,31 +263,31 @@ public:
 	virtual void Cheer(bool Force) RX;
 	virtual int GetDefaultSpeed() const R0;
 	virtual void DecreaseAmmo() RX;
-	virtual void AddPassenger(FootClass* pPassenger) RX;
+	virtual void AddPassenger(FootClass* pPassenger) RX;//Call the AddPassenger function by its PassengerClass varible , play sound , update gunner in FootClass -Zero Fanker
 	virtual bool CanDisguiseAs(AbstractClass*pTarget) const R0;
-	virtual bool TargetAndEstimateDamage(DWORD dwUnk, DWORD dwUnk2) R0;
-	virtual DWORD vt_entry_3A0() R0;
+	virtual bool SearchTargetAndAutoAttack(CoordStruct& location, DWORD dwUnk2) R0;//TargetAndEstimateDamage(DWORD dwUnk, DWORD dwUnk2) R0; SelectAutoTarget is called here -Zero Fanker
+	virtual void BecomeUncontrollable()/*DWORD vt_entry_3A0()R0;*/ RX;// Clear target and distance, destroy spawn nodes , then deselect
 	virtual bool TriggersCellInset(AbstractClass *pTarget) R0;
 	virtual bool IsCloseEnough(AbstractClass *pTarget, int idxWeapon) const R0;
 	virtual bool IsCloseEnoughToAttack(AbstractClass *pTarget) const R0;
 	virtual bool IsCloseEnoughToAttackCoords(const CoordStruct& Coords) const R0;
-	virtual DWORD vt_entry_3B4(DWORD dwUnk) const R0;
+	virtual bool IsCloseEnoughForVirtualScan(AbstractClass* pTarget)/*DWORD vt_entry_3B4(DWORD dwUnk)*/ const R0;
 	virtual void Destroyed(ObjectClass *Killer) = 0;
 	virtual FireError GetFireErrorWithoutRange(AbstractClass *pTarget, int nWeaponIndex) const RT(FireError);
 	virtual FireError GetFireError(AbstractClass *pTarget, int nWeaponIndex, bool ignoreRange) const RT(FireError);
-	virtual CellClass* SelectAutoTarget(TargetFlags TargetFlags, int CurrentThreat, bool OnlyTargetHouseEnemy) R0;
+	virtual TechnoClass* SelectAutoTarget(TargetFlags TargetFlags, CoordStruct& TargetCoord, bool OnlyTargetHouseEnemy) R0; //virtual TechnoClass* SelectAutoTarget(TargetFlags TargetFlags, int CurrentThreat, bool OnlyTargetHouseEnemy) R0;
 	virtual void SetTarget(AbstractClass *pTarget) RX;
 	virtual BulletClass* Fire(AbstractClass* pTarget, int nWeaponIndex) R0;
 	virtual void Guard() RX; // clears target and destination and puts in guard mission
 	virtual bool SetOwningHouse(HouseClass* pHouse, bool announce = true) R0;
-	virtual void vt_entry_3D8(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3) RX;
+	virtual void UpdateRockingState(CoordStruct& rockingCoord, float rockerValue, bool halfEffect) RX;
 	virtual bool Crash(ObjectClass *Killer) R0;
 	virtual bool IsAreaFire() const R0;
 	virtual int IsNotSprayAttack() const R0;
-	virtual int vt_entry_3E8() R0;
+	virtual int GetVirtualScannerWeaponIdx()/*vt_entry_3E8()*/ R0;//Hardcoded to return 1
 	virtual int IsNotSprayAttack2() const R0;
 	virtual WeaponStruct* GetDeployWeapon() const R0;
-	virtual WeaponStruct* GetTurretWeapon() const R0;
+	virtual WeaponStruct* GetTurretWeapon() const R0;//Return GetWeapon(CurrentTurretIndex) for IFV or GetWeapon(0) for nomal
 	virtual WeaponStruct* GetWeapon(int nWeaponIndex) const R0;
 	virtual bool HasTurret() const R0;
 	virtual bool CanOccupyFire() const R0;
@@ -281,10 +297,10 @@ public:
 	virtual void UpdateCloak(bool bUnk = 1) RX;
 	virtual void CreateGap() RX;
 	virtual void DestroyGap() RX;
-	virtual void vt_entry_41C() RX;
+	virtual void UpdateForcedMovement/*vt_entry_41C*/() RX;//Zero Fanker: rocker data or rotate data is handled here , for rocking , crashing , sinking ...
 	virtual void Sensed() RX;
 	virtual void Reload() RX;
-	virtual void vt_entry_428() RX;
+	virtual void CheckTargetInRangeStatus/*vt_entry_428*/() RX;//Zero Fanker : check whether current target is out of range , then pick up another one
 	virtual CoordStruct* GetTargetCoords(CoordStruct* pCrd) const R0;
 	virtual bool IsNotWarpingIn() const R0;
 	virtual bool vt_entry_434(DWORD dwUnk) const R0;
@@ -300,26 +316,26 @@ public:
 	virtual void DrawHealthBar(Point2D *pLocation, RectangleStruct *pBounds, bool bUnk3) const RX;
 	virtual void DrawPipScalePips(Point2D *pLocation, Point2D *pOriginalLocation, RectangleStruct *pBounds) const RX;
 	virtual void DrawVeterancyPips(Point2D *pLocation, RectangleStruct *pBounds) const RX;
-	virtual void DrawExtraInfo(Point2D *pLocation, Point2D *pOriginalLocation, RectangleStruct *pBounds) const RX;
+	virtual void DrawExtraInfo(Point2D *pLocation, Point2D *pOriginalLocation, RectangleStruct *pBounds) const RX;//Draw power drain , primary building info
 	virtual void Uncloak(bool bPlaySound) RX;
 	virtual void Cloak(bool bPlaySound) RX;
-	virtual DWORD vt_entry_464(DWORD dwUnk) const R0;
+	virtual int GetFlash(int const Light)/*vt_entry_464(DWORD dwUnk)*/ const R0;
 	virtual void UpdateRefinerySmokeSystems() RX;
 	virtual DWORD DisguiseAs(AbstractClass* pTarget) R0;
 	virtual void ClearDisguise() RX;
 	virtual bool IsItTimeForIdleActionYet() const R0;
 	virtual bool UpdateIdleAction() R0;
 	virtual void vt_entry_47C(DWORD dwUnk) RX;
-	virtual void SetDestination(AbstractClass* pDest, bool bUnk) RX;
-	virtual bool AnimState(int state) R0;
-	virtual void UpdateSight(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4, DWORD dwUnk5) RX;
-	virtual void vt_entry_48C(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4) RX;
-	virtual void vt_entry_490(DWORD dwUnk, DWORD dwUnk2) = 0; //pure virtual
+	virtual void SetDestination(AbstractClass* pDest, bool bUnk = true) RX;
+	virtual bool AssumeTaskComplete(DWORD dwUnk = 0, DWORD dwUnk2 = 1) R0;
+	virtual void UpdateSightA(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4, DWORD dwUnk5) RX;
+	virtual void UpdateSightB/*vt_entry_48C*/(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4) RX;
+	virtual bool TryPutAndRemoveObstacles(CoordStruct* location, unsigned dFaceDir) = 0; //pure virtual -vt_entry_490
 	virtual void RadarTrackingStart() RX;
 	virtual void RadarTrackingStop() RX;
 	virtual void RadarTrackingFlash() RX;
 	virtual void RadarTrackingUpdate(bool bUnk) RX;
-	virtual void vt_entry_4A4(DWORD dwUnk) RX;
+	virtual Mission GetEventMission(NetworkEvent* const pEvent) const RT(Mission)/*void vt_entry_4A4(DWORD dwUnk) RX*/;
 	virtual void vt_entry_4A8() RX;
 	virtual bool vt_entry_4AC() const R0;
 	virtual bool vt_entry_4B0() const R0;
@@ -353,7 +369,7 @@ public:
 	bool CanBePermaMindControlled() const
 		{ JMP_THIS(0x53C450); }
 
-	LaserDrawClass* CreateLaser(ObjectClass *pTarget, int idxWeapon, WeaponTypeClass *pWeapon, const CoordStruct &Coords)
+	LaserDrawClass* CreateLaser(AbstractClass/*ObjectClass*/ *pTarget, int idxWeapon, WeaponTypeClass *pWeapon, const CoordStruct &Coords)
 		{ JMP_THIS(0x6FD210); }
 
 	/*
@@ -389,6 +405,52 @@ public:
 		int* pThreatPosed,
 		DWORD dwUnk3)
 			{ JMP_THIS(0x6F8960); }
+
+	//Ares WC added:
+	// changes locomotor to the given one, Magnetron style
+	// mind that this locks up the source too, Magnetron style
+	// *shifted from <FootClass.h>
+	void ImbueLocomotor(FootClass *target, CLSID clsid)
+		{ JMP_THIS(0x710000); }
+
+	CellStruct FindNearbyCellCoordForTechno(TechnoClass* pForWho) const
+	{
+		CellStruct ret;
+		this->FindNearbyCellCoordForTechno(ret, pForWho);
+		return ret;
+	}
+
+	CellStruct* FindNearbyCellCoordForTechno(CellStruct& buffer, TechnoClass* pForWho) const
+		{ JMP_THIS(0x703590); }
+
+	CellStruct GetLastFlightMapCoords() const
+	{
+		CellStruct ret;
+		this->GetLastFlightMapCoords(ret);
+		return ret;
+	}
+
+	bool CanGetExtraRangeOn(CoordStruct* TargetCoord,AbstractClass* pTarget,WeaponTypeClass* pWeapon) const
+		{ JMP_THIS(0x6F7220); }
+
+	void SetLocomotorTargetFree(bool resetTarget)
+		{ JMP_THIS(0x70FEE0); }
+
+	EBolt* CreateEBolt(AbstractClass* pTarget, WeaponTypeClass* pWeaponType, CoordStruct& DrawLocation)
+		{ JMP_THIS(0x6FD460); }
+
+	void DrawSHPImage(SHPStruct *SHP, int FrameIdx, Point2D *pLocation, 
+		RectangleStruct *pBound, int a7, int a8, int ZAdjust, DWORD arg9, 
+		char a11, int ExtraGlow, int TintAdded, DWORD *a14,
+		DWORD argD, int ZS_X, int ZS_Y, int a18)
+		{ JMP_THIS(0x705E00); }
+
+	bool IsGreenHP() const
+	{
+		double health = this->Health;
+		return  health / this->GetType()->Strength > RulesClass::Instance->ConditionYellow;
+	}
+	//end add
 
 	void Reactivate()
 		{ JMP_THIS(0x70FBE0); }
@@ -437,7 +499,7 @@ public:
 	bool HasAbility(Ability ability) const
 		{ JMP_THIS(0x70D0D0); }
 
-	int DistToTarget(TechnoClass* Target) const
+	int GetDistanceToTarget(AbstractClass* pTarget) const
 		{ JMP_THIS(0x5F6360); }
 
 	int GetIonCannonValue(AIDifficulty difficulty) const;
@@ -483,7 +545,7 @@ public:
 	ProgressTimer    Animation; // how the unit animates
 	PassengersClass  Passengers;
 	TechnoClass*     Transporter; // unit carrying me
-	int              unknown_int_120;
+	int              LastGuardAreaTargetingFrame;//unknown_int_120;
 	int              CurrentTurretNumber; // for IFV/gattling/charge turrets
 	int              unknown_int_128;
 	AnimClass*       BehindAnim;
@@ -493,7 +555,7 @@ public:
 	Rank             CurrentRanking; // only used for promotion detection
 	int              CurrentGattlingStage;
 	int              GattlingValue; // sum of RateUps and RateDowns
-	DWORD            unknown_148;
+	int              TurretAnimFrame;// unknown_148;
 	HouseClass*      InitialOwner; // only set in ctor
 	VeterancyStruct  Veterancy;
 	PROTECTED_PROPERTY(DWORD, align_154);
@@ -569,7 +631,7 @@ public:
 	bool             MindControlledByAUnit;
 	AnimClass*       MindControlRingAnim;
 	HouseClass*      MindControlledByHouse; //used for a TAction
-	SpawnManagerClass* SpawnManager;
+	SpawnManagerClass* SpawnManager;// for DRED , V3 Launcher and such
 	TechnoClass*     SpawnOwner; // on DMISL , points to DRED and such
 	SlaveManagerClass* SlaveManager;
 	TechnoClass*     SlaveOwner; // on SLAV, points to YAREFN
@@ -579,8 +641,8 @@ public:
 	TechnoClass*     BunkerLinkedItem;
 
 	float            PitchAngle; // not exactly, and it doesn't affect the drawing, only internal state of a dropship
-	TimerStruct      DiskLaserTimer;
-	DWORD            unknown_2F8;
+	TimerStruct      DiskLaserTimer;//this one should be "RechargeTimer" , since this is the true ROF Timer
+	int              ROFCounter;//DWORD            unknown_2F8;
 	int              Ammo;
 	int              Value; // set to actual cost when this gets queued in factory, updated only in building's 42C
 
@@ -632,9 +694,9 @@ public:
 	bool             IsInPlayfield;
 	RecoilData       TurretRecoil;
 	RecoilData       BarrelRecoil;
-	bool             unknown_bool_418;
+	bool             IsTetheredBySomething;//unknown_bool_418
 	bool             unknown_bool_419;
-	bool             IsHumanControlled;
+	bool			   IsLocalPlayerControlled;//IsHumanControlled;- set in TechnoClass::Init() - Zero Fanker
 	bool             DiscoveredByPlayer;
 	bool             DiscoveredByComputer;
 	bool             unknown_bool_41D;
@@ -658,7 +720,7 @@ public:
 	bool             CountedAsOwnedSpecial; // for absorbers, infantry uses this to manually control OwnedInfantry count
 	bool             Absorbed; // in UnitAbsorb/InfantryAbsorb or smth, lousy memory
 	bool             unknown_bool_43A;
-	DWORD            unknown_43C;
+	int				   RadialFireCounter;//DWORD            unknown_43C;
 	DynamicVectorClass<int> CurrentTargetThreatValues;
 	DynamicVectorClass<AbstractClass*> CurrentTargets;
 
@@ -668,7 +730,7 @@ public:
 	AudioController  Audio3;
 
 	DWORD            unknown_49C;
-	DWORD            unknown_4A0;
+	bool			 TurretFacingChanging;//DWORD            unknown_4A0;
 
 	AudioController  Audio4;
 
@@ -686,7 +748,7 @@ public:
 	DWORD            unknown_4F4;
 	bool             unknown_bool_4F8;
 	DWORD            unknown_4FC;	//gets initialized with the current Frame, but this is NOT a TimerStruct!
-	DWORD            unknown_500;
+	AbstractClass*            unknown_500;/*DWORD*/
 	DWORD            EMPLockRemaining;
 	DWORD            ThreatPosed; // calculated to include cargo etc
 	DWORD            ShouldLoseTargetNow;

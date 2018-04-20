@@ -185,6 +185,17 @@ public:
 		swap(this->IsAllocated, other.IsAllocated);
 	}
 
+	//Ares WC added , helper :
+	bool Contains(const T& item) const {
+		for (auto i = 0; i < this->Capacity; ++i) {
+			if (this->Items[i] == item) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	T* Items{ nullptr };
 	int Capacity{ 0 };
 	bool IsInitialized{ true };

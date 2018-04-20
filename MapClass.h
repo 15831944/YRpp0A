@@ -171,7 +171,7 @@ public:
 		return (MapCoords.Y << 9) + MapCoords.X;
 	}
 
-	// gets a coordinate in a random direction a fixed distance in leptons away from coords
+	// gets a coordinate in a random direction a fixed distance in leptons away from coords (Z coord does not change)
 	static CoordStruct* __fastcall GetRandomCoordsNear(CoordStruct &outBuffer, const CoordStruct &coords, int distance, bool center) {
 		JMP_STD(0x49F420);
 	}
@@ -201,6 +201,10 @@ public:
 
 	void UpdateObjectLayer(ObjectClass *obj)
 		{ JMP_THIS(0x4A9720); }
+
+	void DeleteObjectFromLayers(ObjectClass *pObject)
+		{ JMP_THIS(0x4A9770); }
+
 // the key damage delivery
 /*! The key damage delivery function.
 	\param Coords Location of the impact/center of damage.
@@ -266,7 +270,10 @@ public:
 	CellStruct* Pathfinding_Find(CellStruct &outBuffer, const CellStruct &position, SpeedType SpeedType, int a5, MovementZone MovementZone, bool alt, int SpaceSizeX, int SpaceSizeY, bool disallowOverlay, bool a11, bool requireBurrowable, bool allowBridge, const CellStruct &closeTo, bool a15, bool buildable)
 		{ JMP_THIS(0x56DC20); }
 
-	CellStruct Pathfinding_Find(const CellStruct &position, SpeedType SpeedType, int a5, MovementZone MovementZone, bool alt, int SpaceSizeX, int SpaceSizeY, bool disallowOverlay, bool a11, bool requireBurrowable, bool allowBridge, const CellStruct &closeTo, bool a15, bool buildable) {
+	CellStruct Pathfinding_Find(const CellStruct &position, SpeedType SpeedType, int a5, 
+		MovementZone MovementZone, bool alt, int SpaceSizeX, int SpaceSizeY, 
+		bool disallowOverlay, bool a11, bool requireBurrowable, bool allowBridge, 
+		const CellStruct &closeTo, bool a15, bool buildable) {
 		CellStruct outBuffer;
 		Pathfinding_Find(outBuffer, position, SpeedType, a5, MovementZone, alt, SpaceSizeX, SpaceSizeY, disallowOverlay, a11, requireBurrowable, allowBridge, closeTo, a15, buildable);
 		return outBuffer;
@@ -371,6 +378,22 @@ public:
 
 	void Reshroud(HouseClass* pHouse)
 		{ JMP_THIS(0x577AB0); }
+
+	//Ares WC added:
+	void ShroudGrowOneStep()
+		{ JMP_THIS(0x4ACAC0); }
+
+	void UpdateVisiabilityOfTechnos(bool bUkn1, bool bUkn2)
+		{ JMP_THIS(0x4ADFF0); }
+
+	int CanLocationBeReached(CellStruct &Crd,
+		MovementZone Zone, char unk_bool) const
+		{ JMP_THIS(0x56D230); }
+
+	ObjectClass* GetSomeObject(CellStruct &Crd, Point2D const& Offset) const
+	{
+		return this->GetCellAt(Crd)->GetSomeObject(Offset, false);
+	}//4AA290
 
 // the unknown functions that are srs bsns
 	int sub_578080(CoordStruct *Coords)
