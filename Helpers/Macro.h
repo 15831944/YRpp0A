@@ -28,8 +28,13 @@
 
 
 // swizzle shorthand
-#define SWIZZLE(var) \
+//shifted to Ares stuff
+//new location : Misc\Stream.h
+/*#define SWIZZLE(var) \
 	SwizzleManagerClass::Instance.Swizzle((void **)&var);
+
+#define HERE_I_AM(oldVar,NewVar) \
+	SwizzleManagerClass::Instance.Here_I_Am(oldVar,NewVar);*/
 
 
 #include <cmath>

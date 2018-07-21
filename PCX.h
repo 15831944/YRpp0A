@@ -10,7 +10,7 @@ class PCX
 {
 protected:
 		// Load a PCX file
-		bool ForceLoadFile(const char* pFileName, int flag1, int flag2)
+		bool ForceLoadFile(const char* pFileName, int flag1, int flag2 = 0)
 			{ JMP_THIS(0x6B9D00); }
 
 public:

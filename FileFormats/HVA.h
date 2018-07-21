@@ -1,13 +1,14 @@
 #pragma once
 
 class CCFileClass;
+struct MotFrameStruct;
 
 class MotLib {
 public:
 	DWORD f_0;
 	DWORD f_4;
 	int FrameCount;//DWORD f_8;
-	void* f_C;
+	MotFrameStruct* MotFrames;
 
 	MotLib(CCFileClass* Source)
 		{ JMP_THIS(0x5BD570); }

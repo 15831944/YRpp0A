@@ -132,7 +132,7 @@ public:
 	UnitTypeClass* SecretUnit;
 	BuildingTypeClass* SecretBuilding;
 	int field_EB0;
-	int Adjacent;
+	int Adjacent;//default to be 3
 	AbstractType Factory;
 	CoordStruct TargetCoordOffset;
 	CoordStruct ExitCoord;

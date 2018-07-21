@@ -117,13 +117,13 @@ public:
 	//Properties
 	DynamicVectorClass<BaseNodeClass> BaseNodes;
 	int                               PercentBuilt;
-	DynamicVectorClass<CellStruct>    Cells_24;
+	DynamicVectorClass<CellStruct>    SpacingCells;//Cells_24
 	DynamicVectorClass<CellStruct>    Cells_38;
 	CellStruct Center;
+	RectangleStruct SpacingBound;
+	PROTECTED_PROPERTY(BYTE,                    unknown_64[0x10]);
 
-	PROTECTED_PROPERTY(BYTE,                    unknown_54[0x20]);
-
-	HouseClass*                       Owner;
+	HouseClass*	Owner;
 
 #pragma warning(suppress : 4265)
 };

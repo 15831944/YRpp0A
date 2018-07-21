@@ -172,9 +172,11 @@ public:
 	}
 
 	void Purge() {
-		this->Items = nullptr;
+		new(this) VectorClass<T>;
+		//this->VectorClass::VectorClass();
+		/*this->Items = nullptr;
 		this->IsAllocated = false;
-		this->Capacity = 0;
+		this->Capacity = 0;*/
 	}
 
 	void Swap(VectorClass& other) noexcept {
@@ -349,8 +351,10 @@ public:
 	}
 
 	void Purge() {
-		this->Count = 0;
-		VectorClass::Purge();
+		new (this)DynamicVectorClass<T>;
+		//this->DynamicVectorClass::DynamicVectorClass();
+		//this->Count = 0;
+		//VectorClass::Purge();
 	}
 
 	void Swap(DynamicVectorClass& other) noexcept {
@@ -401,6 +405,10 @@ public:
 		DynamicVectorClass::Swap(other);
 		using std::swap;
 		swap(this->unknown_18, other.unknown_18);
+	}
+
+	void Purge() {
+		new (this)TypeList<T>;
 	}
 
 	int unknown_18{ 0 };

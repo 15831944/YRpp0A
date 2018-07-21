@@ -440,6 +440,7 @@ enum class ScriptAction : int {
 	SellAllAndHunt = 30,
 	HideMap = 35,
 	RevealMap = 36,
+	DeleteMembers = 37,
 	ChangeDirectionTo = 42,
 	LoadTillFull = 43,
 	AttackBuildingID = 46,

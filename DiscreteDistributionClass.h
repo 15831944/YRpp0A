@@ -44,6 +44,11 @@ public:
 	}
 
 	void Add(T value, unsigned int weight = 1u) {
+
+		if (!weight) {
+			return;
+		}
+
 		DistributionObject<T> item(std::move(value), weight);
 		this->Add(std::move(item));
 	}
@@ -105,10 +110,6 @@ public:
 	T Select(T default = T()) const {
 		this->Select(ScenarioClass::Instance->Random, &default);
 		return default;
-	}
-
-	T Select() const {
-		return this->Select(T());
 	}
 
 private:
