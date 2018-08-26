@@ -13,6 +13,9 @@ class NOVTABLE BombClass : public AbstractClass
 public:
 	static const AbstractType AbsID = AbstractType::Bomb;
 
+	//Array
+	static DynamicVectorClass<BombClass*>* const Array;
+
 	//IPersist
 	virtual HRESULT __stdcall GetClassID(CLSID* pClassID) R0;
 

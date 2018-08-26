@@ -450,6 +450,12 @@ public:
 		double health = this->Health;
 		return  health / this->GetType()->Strength > RulesClass::Instance->ConditionYellow;
 	}
+
+	//helper
+	int DecreaseSomeAmmo(int count)
+	{
+		return this->Ammo = std::max(this->Ammo - count, 0);
+	}
 	//end add
 
 	void Reactivate()

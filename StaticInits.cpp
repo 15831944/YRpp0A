@@ -49,6 +49,9 @@ ALIAS(AudioStream *, AudioStream::Instance, 0xB1D4D8);
 #include <BombListClass.h>
 ALIAS_O(BombListClass* const, BombListClass::Instance, 0x87F5D8);
 
+#include <BombClass.h>
+DECL(BombClass, 0x89C668);
+
 #include <BulletClass.h>
 DECL(BulletClass, 0xA8ED40);
 ALIAS(DynamicVectorClass<BulletClass*>, BulletClass::ScalableBullets, 0x89DE18);
@@ -65,6 +68,9 @@ ALIAS(int, BuildingTypeClass::HeightInLeptons, 0x89DDB8);
 
 #include <BuildingLightClass.h>
 DECL(BuildingLightClass, 0x8B4190);
+
+#include <LightSourceClass.h>
+DECL(LightSourceClass, 0xABCA10);
 
 #include <CaptureManagerClass.h>
 DECL(CaptureManagerClass, 0x89E0F0);
