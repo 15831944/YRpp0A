@@ -62,6 +62,11 @@ public:
 		return this->TotalWeight;
 	}
 
+	const DynamicVectorClass<DistributionObject<T>>&
+	GetItems() const {
+		return this->Items;
+	}
+
 	int GetCount() const {
 		return this->Items.Count;
 	}
@@ -97,7 +102,7 @@ public:
 		return this->Select(static_cast<unsigned int>(value), pOut);
 	}
 
-	T Select(unsigned int index, T default = T()) const {
+	/*T Select(unsigned int index, T default = T()) const {
 		this->Select(index, &default);
 		return default;
 	}
@@ -105,9 +110,16 @@ public:
 	T Select(Randomizer &random, T default = T()) const {
 		this->Select(random, &default);
 		return default;
+	}*/
+
+	T Select(T& defaultValue, bool useInternalRandom, bool userDefinedDefault) const {
+		T default = defaultValue;
+		this->Select(ScenarioClass::Instance->Random, &default);
+		return default;
 	}
 
-	T Select(T default = T()) const {
+	T Select() const {
+		T default = T();
 		this->Select(ScenarioClass::Instance->Random, &default);
 		return default;
 	}
